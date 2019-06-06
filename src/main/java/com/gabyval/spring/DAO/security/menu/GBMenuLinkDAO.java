@@ -22,16 +22,9 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class GBMenuLinkDAO implements IGabyvalDAO{
-    private SessionFactory session;
     
-    @Override
     @Autowired
-    public void setEntityManager(SessionFactory session) throws GBPersistenceException {
-        this.session=session;
-        if(this.session==null){
-            throw new GBPersistenceException("The session manager can't injected in class GBMenuLinkDAO", null);
-        }
-    }
+    private SessionFactory session;
 
     @Override
     public void save(Object o_to_save) throws GBPersistenceException {

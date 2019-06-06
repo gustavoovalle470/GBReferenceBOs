@@ -23,16 +23,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ADSystemControlDAO implements IGabyvalDAO{
     
-    private SessionFactory session;
-    
-    @Override
     @Autowired
-    public void setEntityManager(SessionFactory session) throws GBPersistenceException {
-        this.session=session;
-        if(this.session==null){
-            throw new GBPersistenceException("The session manager can't injected in class ADSystemControlDAO", null);
-        }
-    }
+    private SessionFactory session;
 
     @Override
     public void save(Object o_to_save) throws GBPersistenceException {
@@ -68,7 +60,7 @@ public class ADSystemControlDAO implements IGabyvalDAO{
         if(session == null){
             throw new GBPersistenceException("The object in ADSystemControlDAO can't get all items, the session is null. Contact whit system administrator.", null);
         }
-        return session.getCurrentSession().createCriteria("From AdSystemControl").list();
+        return session.getCurrentSession().createQuery("From AdSystemControl").list();
     }    
 
     @Override
@@ -76,6 +68,6 @@ public class ADSystemControlDAO implements IGabyvalDAO{
         if(session == null){
             throw new GBPersistenceException("The object in ADSystemControlDAO can't get all items, the session is null. Contact whit system administrator.", null);
         }
-        return session.getCurrentSession().createCriteria(sql_sentence).list();
+        return session.getCurrentSession().createQuery(sql_sentence).list();
     }  
 }

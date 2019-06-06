@@ -8,7 +8,6 @@ package com.gabyval.spring.DAO;
 import com.gabyval.persistence.exception.GBPersistenceException;
 import java.io.Serializable;
 import java.util.List;
-import org.hibernate.SessionFactory;
 
 /**
  * This interface define all DAO classes to implement in this project.
@@ -17,15 +16,7 @@ import org.hibernate.SessionFactory;
  * @since 06/06/2019
  */
 public interface IGabyvalDAO {
-    
-    /**
-     * This method provide the database session to the class.
-     * @param session SessionFactory the session factory injected
-     * @throws GBPersistenceException if:
-     * <ol><li>The session factory can't be injected</li></ol>
-     */
-    public void setEntityManager(SessionFactory session)throws GBPersistenceException;
-    
+        
     /**
      * This method save a object in database.
      * @param o_to_save Object the object to save.

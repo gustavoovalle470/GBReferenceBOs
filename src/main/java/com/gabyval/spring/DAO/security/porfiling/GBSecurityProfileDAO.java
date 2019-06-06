@@ -23,17 +23,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class GBSecurityProfileDAO implements IGabyvalDAO{
     
+    @Autowired
     private SessionFactory session;
     
-    @Override
-    @Autowired
-    public void setEntityManager(SessionFactory session) throws GBPersistenceException {
-        this.session=session;
-        if(this.session==null){
-            throw new GBPersistenceException("The session manager can't injected in class GBSecurityProfileDAO", null);
-        }
-    }
-
     @Override
     public void save(Object o_to_save) throws GBPersistenceException {
         if(o_to_save == null || session == null){
