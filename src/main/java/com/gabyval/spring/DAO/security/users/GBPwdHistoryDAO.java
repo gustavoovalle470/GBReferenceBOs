@@ -31,14 +31,9 @@ public class GBPwdHistoryDAO implements IGabyvalDAO{
         if(o_to_save == null || session == null){
             throw new GBPersistenceException("The object in GBPwdHistoryDAO can't save, the session or the object is null. Contact whit system administrator.", null);
         }
-        Transaction tx= session.getCurrentSession().beginTransaction();
-        tx.begin();
         try{
             session.getCurrentSession().saveOrUpdate(o_to_save);
-            session.getCurrentSession().refresh(o_to_save);
-            tx.commit();
         }catch(HibernateException e){
-            tx.rollback();
             throw new GBPersistenceException("The save operation can't finished, try again or contact with system administrator.", e);
         }
     }

@@ -31,14 +31,9 @@ public class ADExecuteJobDAO implements IGabyvalDAO{
         if(o_to_save == null || session == null){
             throw new GBPersistenceException("The object in ADExecuteJobDAO can't save, the session or the object is null. Contact whit system administrator.", null);
         }
-        Transaction tx= session.getCurrentSession().beginTransaction();
-        tx.begin();
         try{
-            session.getCurrentSession().saveOrUpdate(o_to_save);
-            session.getCurrentSession().refresh(o_to_save);
-            tx.commit();
+         session.getCurrentSession().saveOrUpdate(o_to_save);
         }catch(HibernateException e){
-            tx.rollback();
             throw new GBPersistenceException("The save operation can't finished, try again or contact with system administrator.", e);
         }
     }
