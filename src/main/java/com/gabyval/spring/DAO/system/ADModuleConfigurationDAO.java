@@ -11,8 +11,8 @@ import com.gabyval.spring.DAO.IGabyvalDAO;
 import java.io.Serializable;
 import java.util.List;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -65,4 +65,10 @@ public class ADModuleConfigurationDAO implements IGabyvalDAO{
         }
         return session.getCurrentSession().createCriteria(sql_sentence).list();
     }  
+    
+    public AdModuleConfiguration getConfigurationByName(String configuration_name){
+        Query q = session.getCurrentSession().getNamedQuery("AdModuleConfiguration.findByModuleConfigName");
+        q.setParameter("moduleConfigName", configuration_name);
+        return (AdModuleConfiguration) q.uniqueResult();
+    }
 }
