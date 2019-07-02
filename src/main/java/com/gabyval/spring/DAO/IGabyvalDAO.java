@@ -7,7 +7,9 @@ package com.gabyval.spring.DAO;
 
 import com.gabyval.persistence.exception.GBPersistenceException;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import org.hibernate.Query;
 
 /**
  * This interface define all DAO classes to implement in this project.
@@ -57,13 +59,14 @@ public interface IGabyvalDAO {
     
     /**
      * This method obtained objects from SQL sentence.
-     * @param sql_sentence String the sentence to execute.
-     * @return List<Objects> class objects from database.
+     * @param query_name Query to run.
+     * @param parameters the parameters to insert.
+     * @return List<Object> class objects from database.
      * @throws GBPersistenceException if:
      * <ol>
      *      <li>The session factory is null</li>
      *      <li>Any SQL exception.</li>
      * </ol>
      */
-    public List<Object> runSQL(String sql_sentence) throws GBPersistenceException;
+    public List<Object> runSQL(String query_name, HashMap<String, Object> parameters) throws GBPersistenceException;
 }

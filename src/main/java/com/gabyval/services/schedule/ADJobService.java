@@ -9,7 +9,9 @@ import com.gabyval.persistence.exception.GBPersistenceException;
 import com.gabyval.referencesbo.schedule.AdJob;
 import com.gabyval.spring.DAO.schedule.ADJobDAO;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +38,7 @@ public class ADJobService {
         return aDJobDAO.getAll();
     }    
 
-    public List<Object> runSQL(String sql_sentence) throws GBPersistenceException {
-        return aDJobDAO.runSQL(sql_sentence);
+    public List<Object> runSQL(String query_name, HashMap<String, Object> parameters) throws GBPersistenceException {
+        return aDJobDAO.runSQL(query_name, parameters);
     }  
 }

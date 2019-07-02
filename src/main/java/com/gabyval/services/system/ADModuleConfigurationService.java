@@ -9,6 +9,7 @@ import com.gabyval.persistence.exception.GBPersistenceException;
 import com.gabyval.referencesbo.system.AdModuleConfiguration;
 import com.gabyval.spring.DAO.system.ADModuleConfigurationDAO;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,11 +38,7 @@ public class ADModuleConfigurationService {
         return aDModuleConfigurationDAO.getAll();
     }    
 
-    public List<Object> runSQL(String sql_sentence) throws GBPersistenceException {
-        return aDModuleConfigurationDAO.runSQL(sql_sentence);
+    public List<Object> runSQL(String query_name, HashMap<String, Object> parameters) throws GBPersistenceException {
+        return aDModuleConfigurationDAO.runSQL(query_name, parameters);
     } 
-    
-    public AdModuleConfiguration getConfigurationByName(String configuration_name){
-        return aDModuleConfigurationDAO.getConfigurationByName(configuration_name);
-    }
 }

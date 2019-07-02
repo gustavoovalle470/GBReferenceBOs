@@ -6,13 +6,15 @@
 package com.gabyval.spring.DAO.schedule;
 
 import com.gabyval.persistence.exception.GBPersistenceException;
+import com.gabyval.referencesbo.GBSentencesRBOs;
 import com.gabyval.referencesbo.schedule.AdJob;
 import com.gabyval.spring.DAO.IGabyvalDAO;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -55,14 +57,20 @@ public class ADJobDAO implements IGabyvalDAO{
         if(session == null){
             throw new GBPersistenceException("The object in ADJobDAO can't get all items, the session is null. Contact whit system administrator.", null);
         }
-        return session.getCurrentSession().createCriteria("From AdJob").list();
+        return session.getCurrentSession().getNamedQuery(GBSentencesRBOs.ADJOB_FINDALL).list();
     }    
 
     @Override
-    public List<Object> runSQL(String sql_sentence) throws GBPersistenceException {
+    public List<Object> runSQL(String query_name, HashMap<String, Object> parameters) throws GBPersistenceException {
         if(session == null){
             throw new GBPersistenceException("The object in ADJobDAO can't get all items, the session is null. Contact whit system administrator.", null);
         }
-        return session.getCurrentSession().createCriteria(sql_sentence).list();
+        Query q = session.getCurrentSession().getNamedQuery(query_name);
+        if(parameters != null){
+            for(String parameter:parameters.keySet()){
+                q.setParameter(parameter, parameters.get(parameter));
+            }
+        }
+        return q.list();
     }
 }
