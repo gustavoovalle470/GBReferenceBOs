@@ -74,9 +74,10 @@ public class GBPwdHistoryDAO implements IGabyvalDAO{
         return q.list();
     }
 
-    public List<Object> getPwdHistoryByUser(String username) {
-        Query q = session.getCurrentSession().getNamedQuery("GbPwdHistory.findByGbUsername");
-        q.setParameter("gbUsername", username);
-        return q.list();
+    public void delete(Object object) throws GBPersistenceException {
+        if(session == null){
+            throw new GBPersistenceException("The object in GBPwdHistoryDAO can't get all items, the session is null. Contact whit system administrator.", null);
+        }
+        session.getCurrentSession().delete(object);
     }
 }

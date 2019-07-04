@@ -93,6 +93,7 @@ public class GBSentencesRBOs {
     public static final String GBPWDHISTORY_FINDBYGBPWDINSDT="GbPwdHistory.findByGbPwdInsDt";
     public static final String GBPWDHISTORY_FINDBYCREATEDT="GbPwdHistory.findByCreateDt";
     public static final String GBPWDHISTORY_FINDBYROWVERSION="GbPwdHistory.findByRowversion";
+    public static final String GBPWDHISTORY_FINDFIRSTENTRY="GbPwdHistory.findFirstEntry";
 
     /**
      * Sentencias para la tabla GbStaff

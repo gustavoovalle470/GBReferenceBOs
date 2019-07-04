@@ -41,4 +41,8 @@ public class GBPwdHistoryService {
     public List<Object> runSQL(String query_name, HashMap<String, Object> parameters) throws GBPersistenceException{
         return gBPwdHistoryDAO.runSQL(query_name, parameters);
     }
+    
+    public void delete(Object object) throws GBPersistenceException{
+        gBPwdHistoryDAO.delete(object);
+    }
 }

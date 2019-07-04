@@ -35,7 +35,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "GbPwdHistory.findByGbPwdSaved", query = "SELECT g FROM GbPwdHistory g WHERE g.gbPwdHistoryPK.gbPwdSaved = :gbPwdSaved")
     , @NamedQuery(name = "GbPwdHistory.findByGbPwdInsDt", query = "SELECT g FROM GbPwdHistory g WHERE g.gbPwdInsDt = :gbPwdInsDt")
     , @NamedQuery(name = "GbPwdHistory.findByCreateDt", query = "SELECT g FROM GbPwdHistory g WHERE g.createDt = :createDt")
-    , @NamedQuery(name = "GbPwdHistory.findByRowversion", query = "SELECT g FROM GbPwdHistory g WHERE g.rowversion = :rowversion")})
+    , @NamedQuery(name = "GbPwdHistory.findByRowversion", query = "SELECT g FROM GbPwdHistory g WHERE g.rowversion = :rowversion")
+    , @NamedQuery(name = "GbPwdHistory.findFirstEntry", query = "SELECT g FROM GbPwdHistory g WHERE g.gbPwdHistoryPK.gbUsername=:gbUsername1 AND g.gbPwdInsDt =(SELECT MIN(g2.gbPwdInsDt) FROM GbPwdHistory g2 where g2.gbPwdHistoryPK.gbUsername=:gbUsername2)")})
 public class GbPwdHistory implements Serializable {
 
     private static final long serialVersionUID = 1L;
