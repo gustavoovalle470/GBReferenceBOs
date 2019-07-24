@@ -41,4 +41,8 @@ public class GBStaffService {
     public List<Object> runSQL(String query_name, HashMap<String, Object> parameters) throws GBPersistenceException {
         return gBStaffDAO.runSQL(query_name, parameters);
     }  
+    
+    public void refresh(Object object_to_update){
+        gBStaffDAO.refresh(object_to_update);
+    }
 }

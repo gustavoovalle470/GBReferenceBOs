@@ -50,6 +50,7 @@ public class GBSentencesRBOs {
     public static final String GBMENULINKS_FINDBYGBICON="GbMenulinks.findByGbIcon";
     public static final String GBMENULINKS_FINDBYCREATEDT="GbMenulinks.findByCreateDt";
     public static final String GBMENULINKS_FINDBYROWVERSION="GbMenulinks.findByRowversion";
+    public static final String GBMENULINKS_FINDBYUSERNAME="GbMenulinks.findByUsername";
 
     /**
      * Sentencias para la tabla GbMenuProfiling

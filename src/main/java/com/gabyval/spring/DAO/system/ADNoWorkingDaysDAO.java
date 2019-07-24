@@ -34,6 +34,7 @@ public class ADNoWorkingDaysDAO implements IGabyvalDAO{
         }
         try{
             session.getCurrentSession().saveOrUpdate(o_to_save);
+            session.getCurrentSession().refresh(o_to_save);
         }catch(HibernateException e){
             throw new GBPersistenceException("The save operation can't finished, try again or contact with system administrator.", e);
         }

@@ -42,11 +42,13 @@ public class GBStaffDAO implements IGabyvalDAO{
 
     @Override
     public GbStaff load(Serializable o_id) throws GBPersistenceException {
+        Object object_from_db;
         if(o_id == null || session == null){
             throw new GBPersistenceException("The object in GBStaffDAO can't load, the session or the object id is null. Contact whit system administrator.", null);
         }
-        try{
-            return (GbStaff) session.getCurrentSession().get(GbStaff.class, o_id);
+        try{             
+            object_from_db = session.getCurrentSession().get(GbStaff.class, o_id);
+            return (GbStaff) object_from_db;
         }catch(HibernateException e){
             throw new GBPersistenceException("The save operation can't finished, try again or contact with system administrator.", e);
         }
@@ -72,5 +74,9 @@ public class GBStaffDAO implements IGabyvalDAO{
             }
         }
         return q.list();
+    }
+    
+    public void refresh(Object object_to_refresh){
+        session.getCurrentSession().refresh(object_to_refresh);
     }
 }
