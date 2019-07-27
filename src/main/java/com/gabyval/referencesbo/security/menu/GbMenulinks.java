@@ -44,8 +44,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "GbMenulinks.findByGbMenuStatus", query = "SELECT g FROM GbMenulinks g WHERE g.gbMenuStatus = :gbMenuStatus")
     , @NamedQuery(name = "GbMenulinks.findByGbIcon", query = "SELECT g FROM GbMenulinks g WHERE g.gbIcon = :gbIcon")
     , @NamedQuery(name = "GbMenulinks.findByCreateDt", query = "SELECT g FROM GbMenulinks g WHERE g.createDt = :createDt")
-    , @NamedQuery(name = "GbMenulinks.findByRowversion", query = "SELECT g FROM GbMenulinks g WHERE g.rowversion = :rowversion")
-    , @NamedQuery(name = "GbMenulinks.findByUsername", query="SELECT g FROM GbMenulinks g WHERE g.gbMenuId IN (SELECT b.gbMenuId FROM GbMenuProfiling b WHERE b.gbProfile IN(SELECT c.gbMenuProfilingPK.gbProfile FROM GbUserProfiling c WHERE c.gbUserProfilingPK.gbUsername=:gbUsername))")})
+    , @NamedQuery(name = "GbMenulinks.findByRowversion", query = "SELECT g FROM GbMenulinks g WHERE g.rowversion = :rowversion")})
 public class GbMenulinks implements Serializable {
 
     private static final long serialVersionUID = 1L;
