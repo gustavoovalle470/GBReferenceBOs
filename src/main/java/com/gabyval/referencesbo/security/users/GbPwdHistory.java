@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author OvalleGA
  */
 @Entity
-@Table(name = "gb_pwd_history", catalog = "gb_database", schema = "")
+@Table(name = "gb_pwd_history", catalog = "db_gabyval", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "GbPwdHistory.findAll", query = "SELECT g FROM GbPwdHistory g")

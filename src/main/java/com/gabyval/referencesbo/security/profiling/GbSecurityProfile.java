@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author OvalleGA
  */
 @Entity
-@Table(name = "gb_security_profile", catalog = "gb_database", schema = "")
+@Table(name = "gb_security_profile", catalog = "db_gabyval", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "GbSecurityProfile.findAll", query = "SELECT g FROM GbSecurityProfile g")
