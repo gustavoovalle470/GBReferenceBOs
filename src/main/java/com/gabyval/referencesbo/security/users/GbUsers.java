@@ -5,8 +5,9 @@
  */
 package com.gabyval.referencesbo.security.users;
 
-import com.gabyval.referencesbo.security.profiling.GbUserProfiling;
+import com.gabyval.referencesbo.system.AdCatalogs;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -14,6 +15,9 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -30,23 +34,19 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author OvalleGA
  */
 @Entity
-@Table(name = "gb_users", catalog = "db_gabyval", schema = "")
+@Table(name = "gb_users")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "GbUsers.findAll", query = "SELECT g FROM GbUsers g")
-    , @NamedQuery(name = "GbUsers.findByGbUsername", query = "SELECT g FROM GbUsers g WHERE g.gbUsername = :gbUsername")
-    , @NamedQuery(name = "GbUsers.findByGbPassword", query = "SELECT g FROM GbUsers g WHERE g.gbPassword = :gbPassword")
-    , @NamedQuery(name = "GbUsers.findByGbLoginStatus", query = "SELECT g FROM GbUsers g WHERE g.gbLoginStatus = :gbLoginStatus")
-    , @NamedQuery(name = "GbUsers.findByGbOprativeStatus", query = "SELECT g FROM GbUsers g WHERE g.gbOprativeStatus = :gbOprativeStatus")
-    , @NamedQuery(name = "GbUsers.findByGbLastPwdXgeDt", query = "SELECT g FROM GbUsers g WHERE g.gbLastPwdXgeDt = :gbLastPwdXgeDt")
-    , @NamedQuery(name = "GbUsers.findByGbLastLogginDt", query = "SELECT g FROM GbUsers g WHERE g.gbLastLogginDt = :gbLastLogginDt")
-    , @NamedQuery(name = "GbUsers.findByGbLastXgeDt", query = "SELECT g FROM GbUsers g WHERE g.gbLastXgeDt = :gbLastXgeDt")
-    , @NamedQuery(name = "GbUsers.findByGbLastUserXge", query = "SELECT g FROM GbUsers g WHERE g.gbLastUserXge = :gbLastUserXge")
-    , @NamedQuery(name = "GbUsers.findByGbUserSystem", query = "SELECT g FROM GbUsers g WHERE g.gbUserSystem = :gbUserSystem")
-    , @NamedQuery(name = "GbUsers.findByCreateDt", query = "SELECT g FROM GbUsers g WHERE g.createDt = :createDt")
-    , @NamedQuery(name = "GbUsers.findByRowversion", query = "SELECT g FROM GbUsers g WHERE g.rowversion = :rowversion")})
+    @NamedQuery(name = "GbUsers.findAll", query = "SELECT g FROM GbUsers g"),
+    @NamedQuery(name = "GbUsers.findByGbUsername", query = "SELECT g FROM GbUsers g WHERE g.gbUsername = :gbUsername"),
+    @NamedQuery(name = "GbUsers.findByCreateDt", query = "SELECT g FROM GbUsers g WHERE g.createDt = :createDt"),
+    @NamedQuery(name = "GbUsers.findByGbLastLogginDt", query = "SELECT g FROM GbUsers g WHERE g.gbLastLogginDt = :gbLastLogginDt"),
+    @NamedQuery(name = "GbUsers.findByGbLastPwdXgeDt", query = "SELECT g FROM GbUsers g WHERE g.gbLastPwdXgeDt = :gbLastPwdXgeDt"),
+    @NamedQuery(name = "GbUsers.findByGbLastXgeDt", query = "SELECT g FROM GbUsers g WHERE g.gbLastXgeDt = :gbLastXgeDt"),
+    @NamedQuery(name = "GbUsers.findByGbPassword", query = "SELECT g FROM GbUsers g WHERE g.gbPassword = :gbPassword"),
+    @NamedQuery(name = "GbUsers.findByGbUserSystem", query = "SELECT g FROM GbUsers g WHERE g.gbUserSystem = :gbUserSystem"),
+    @NamedQuery(name = "GbUsers.findByRowversion", query = "SELECT g FROM GbUsers g WHERE g.rowversion = :rowversion")})
 public class GbUsers implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -56,22 +56,9 @@ public class GbUsers implements Serializable {
     private String gbUsername;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 60)
-    @Column(name = "GB_PASSWORD")
-    private String gbPassword;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "GB_LOGIN_STATUS")
-    private int gbLoginStatus;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "GB_OPRATIVE_STATUS")
-    private int gbOprativeStatus;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "GB_LAST_PWD_XGE_DT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date gbLastPwdXgeDt;
+    @Column(name = "CREATE_DT")
+    @Temporal(TemporalType.DATE)
+    private Date createDt;
     @Basic(optional = false)
     @NotNull
     @Column(name = "GB_LAST_LOGGIN_DT")
@@ -79,32 +66,42 @@ public class GbUsers implements Serializable {
     private Date gbLastLogginDt;
     @Basic(optional = false)
     @NotNull
+    @Column(name = "GB_LAST_PWD_XGE_DT")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date gbLastPwdXgeDt;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "GB_LAST_XGE_DT")
     @Temporal(TemporalType.TIMESTAMP)
     private Date gbLastXgeDt;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 100)
-    @Column(name = "GB_LAST_USER_XGE")
-    private String gbLastUserXge;
+    @Size(min = 1, max = 60)
+    @Column(name = "GB_PASSWORD")
+    private String gbPassword;
     @Basic(optional = false)
     @NotNull
     @Column(name = "GB_USER_SYSTEM")
     private int gbUserSystem;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "CREATE_DT")
-    @Temporal(TemporalType.DATE)
-    private Date createDt;
-    @Basic(optional = false)
-    @NotNull
+    @Column(name = "ROWVERSION")
     private int rowversion;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "gbUsers")
-    private List<GbUserProfiling> gbUserProfilingList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "gbUsers")
-    private List<GbPwdHistory> gbPwdHistoryList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "gbUsers")
-    private List<GbStaff> gbStaffList;
+    @JoinColumns({
+        @JoinColumn(name = "GB_LOGIN_STATUS", referencedColumnName = "CATALOG_ITEM_ID"),
+        @JoinColumn(name = "GB_LOGIN_STATUS_CNAME", referencedColumnName = "CATALOG_NAME")})
+    @ManyToOne(optional = false)
+    private AdCatalogs LoginStatus;
+    @JoinColumns({
+        @JoinColumn(name = "GB_OPRATIVE_STATUS", referencedColumnName = "CATALOG_ITEM_ID"),
+        @JoinColumn(name = "GB_OPERATIVE_CNAME", referencedColumnName = "CATALOG_NAME")})
+    @ManyToOne(optional = false)
+    private AdCatalogs OperativeStatus;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "gbLastUserXge")
+    private List<GbUsers> gbUsersList;
+    @JoinColumn(name = "GB_LAST_USER_XGE", referencedColumnName = "GB_USERNAME")
+    @ManyToOne(optional = false)
+    private GbUsers gbLastUserXge;
 
     public GbUsers() {
     }
@@ -113,17 +110,14 @@ public class GbUsers implements Serializable {
         this.gbUsername = gbUsername;
     }
 
-    public GbUsers(String gbUsername, String gbPassword, int gbLoginStatus, int gbOprativeStatus, Date gbLastPwdXgeDt, Date gbLastLogginDt, Date gbLastXgeDt, String gbLastUserXge, int gbUserSystem, Date createDt, int rowversion) {
+    public GbUsers(String gbUsername, Date createDt, Date gbLastLogginDt, Date gbLastPwdXgeDt, Date gbLastXgeDt, String gbPassword, int gbUserSystem, int rowversion) {
         this.gbUsername = gbUsername;
-        this.gbPassword = gbPassword;
-        this.gbLoginStatus = gbLoginStatus;
-        this.gbOprativeStatus = gbOprativeStatus;
-        this.gbLastPwdXgeDt = gbLastPwdXgeDt;
-        this.gbLastLogginDt = gbLastLogginDt;
-        this.gbLastXgeDt = gbLastXgeDt;
-        this.gbLastUserXge = gbLastUserXge;
-        this.gbUserSystem = gbUserSystem;
         this.createDt = createDt;
+        this.gbLastLogginDt = gbLastLogginDt;
+        this.gbLastPwdXgeDt = gbLastPwdXgeDt;
+        this.gbLastXgeDt = gbLastXgeDt;
+        this.gbPassword = gbPassword;
+        this.gbUserSystem = gbUserSystem;
         this.rowversion = rowversion;
     }
 
@@ -135,36 +129,12 @@ public class GbUsers implements Serializable {
         this.gbUsername = gbUsername;
     }
 
-    public String getGbPassword() {
-        return gbPassword;
+    public Date getCreateDt() {
+        return createDt;
     }
 
-    public void setGbPassword(String gbPassword) {
-        this.gbPassword = gbPassword;
-    }
-
-    public int getGbLoginStatus() {
-        return gbLoginStatus;
-    }
-
-    public void setGbLoginStatus(int gbLoginStatus) {
-        this.gbLoginStatus = gbLoginStatus;
-    }
-
-    public int getGbOprativeStatus() {
-        return gbOprativeStatus;
-    }
-
-    public void setGbOprativeStatus(int gbOprativeStatus) {
-        this.gbOprativeStatus = gbOprativeStatus;
-    }
-
-    public Date getGbLastPwdXgeDt() {
-        return gbLastPwdXgeDt;
-    }
-
-    public void setGbLastPwdXgeDt(Date gbLastPwdXgeDt) {
-        this.gbLastPwdXgeDt = gbLastPwdXgeDt;
+    public void setCreateDt(Date createDt) {
+        this.createDt = createDt;
     }
 
     public Date getGbLastLogginDt() {
@@ -175,6 +145,14 @@ public class GbUsers implements Serializable {
         this.gbLastLogginDt = gbLastLogginDt;
     }
 
+    public Date getGbLastPwdXgeDt() {
+        return gbLastPwdXgeDt;
+    }
+
+    public void setGbLastPwdXgeDt(Date gbLastPwdXgeDt) {
+        this.gbLastPwdXgeDt = gbLastPwdXgeDt;
+    }
+
     public Date getGbLastXgeDt() {
         return gbLastXgeDt;
     }
@@ -183,12 +161,12 @@ public class GbUsers implements Serializable {
         this.gbLastXgeDt = gbLastXgeDt;
     }
 
-    public String getGbLastUserXge() {
-        return gbLastUserXge;
+    public String getGbPassword() {
+        return gbPassword;
     }
 
-    public void setGbLastUserXge(String gbLastUserXge) {
-        this.gbLastUserXge = gbLastUserXge;
+    public void setGbPassword(String gbPassword) {
+        this.gbPassword = gbPassword;
     }
 
     public int getGbUserSystem() {
@@ -199,14 +177,6 @@ public class GbUsers implements Serializable {
         this.gbUserSystem = gbUserSystem;
     }
 
-    public Date getCreateDt() {
-        return createDt;
-    }
-
-    public void setCreateDt(Date createDt) {
-        this.createDt = createDt;
-    }
-
     public int getRowversion() {
         return rowversion;
     }
@@ -215,31 +185,37 @@ public class GbUsers implements Serializable {
         this.rowversion = rowversion;
     }
 
-    @XmlTransient
-    public List<GbUserProfiling> getGbUserProfilingList() {
-        return gbUserProfilingList;
+    public AdCatalogs getLoginStatus() {
+        return LoginStatus;
     }
 
-    public void setGbUserProfilingList(List<GbUserProfiling> gbUserProfilingList) {
-        this.gbUserProfilingList = gbUserProfilingList;
+    public void setLoginStatus(AdCatalogs LoginStatus) {
+        this.LoginStatus = LoginStatus;
     }
 
-    @XmlTransient
-    public List<GbPwdHistory> getGbPwdHistoryList() {
-        return gbPwdHistoryList;
+    public AdCatalogs getOperativeStatus() {
+        return OperativeStatus;
     }
 
-    public void setGbPwdHistoryList(List<GbPwdHistory> gbPwdHistoryList) {
-        this.gbPwdHistoryList = gbPwdHistoryList;
+    public void setOperativeStatus(AdCatalogs OperativeStatus) {
+        this.OperativeStatus = OperativeStatus;
     }
 
     @XmlTransient
-    public List<GbStaff> getGbStaffList() {
-        return gbStaffList;
+    public List<GbUsers> getGbUsersList() {
+        return gbUsersList;
     }
 
-    public void setGbStaffList(List<GbStaff> gbStaffList) {
-        this.gbStaffList = gbStaffList;
+    public void setGbUsersList(List<GbUsers> gbUsersList) {
+        this.gbUsersList = gbUsersList;
+    }
+
+    public GbUsers getGbLastUserXge() {
+        return gbLastUserXge;
+    }
+
+    public void setGbLastUserXge(GbUsers gbLastUserXge) {
+        this.gbLastUserXge = gbLastUserXge;
     }
 
     @Override
@@ -267,4 +243,9 @@ public class GbUsers implements Serializable {
         return "com.gabyval.referencesbo.GbUsers[ gbUsername=" + gbUsername + " ]";
     }
     
+    public int getDaysPassedLastXgePwd(){
+        Date fechaInicial=gbLastPwdXgeDt;
+        Date fechaFinal=Calendar.getInstance().getTime();
+        return ((((int) ((fechaFinal.getTime()-fechaInicial.getTime())/86400000))));
+    }
 }

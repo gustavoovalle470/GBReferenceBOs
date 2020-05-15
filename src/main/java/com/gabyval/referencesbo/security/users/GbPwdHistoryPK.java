@@ -18,31 +18,22 @@ import javax.validation.constraints.Size;
  */
 @Embeddable
 public class GbPwdHistoryPK implements Serializable {
-
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 20)
-    @Column(name = "GB_USERNAME")
-    private String gbUsername;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 200)
+    @Size(min = 1, max = 255)
     @Column(name = "GB_PWD_SAVED")
     private String gbPwdSaved;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
+    @Column(name = "GB_USERNAME")
+    private String gbUsername;
 
     public GbPwdHistoryPK() {
     }
 
-    public GbPwdHistoryPK(String gbUsername, String gbPwdSaved) {
-        this.gbUsername = gbUsername;
+    public GbPwdHistoryPK(String gbPwdSaved, String gbUsername) {
         this.gbPwdSaved = gbPwdSaved;
-    }
-
-    public String getGbUsername() {
-        return gbUsername;
-    }
-
-    public void setGbUsername(String gbUsername) {
         this.gbUsername = gbUsername;
     }
 
@@ -54,11 +45,19 @@ public class GbPwdHistoryPK implements Serializable {
         this.gbPwdSaved = gbPwdSaved;
     }
 
+    public String getGbUsername() {
+        return gbUsername;
+    }
+
+    public void setGbUsername(String gbUsername) {
+        this.gbUsername = gbUsername;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (gbUsername != null ? gbUsername.hashCode() : 0);
         hash += (gbPwdSaved != null ? gbPwdSaved.hashCode() : 0);
+        hash += (gbUsername != null ? gbUsername.hashCode() : 0);
         return hash;
     }
 
@@ -69,10 +68,10 @@ public class GbPwdHistoryPK implements Serializable {
             return false;
         }
         GbPwdHistoryPK other = (GbPwdHistoryPK) object;
-        if ((this.gbUsername == null && other.gbUsername != null) || (this.gbUsername != null && !this.gbUsername.equals(other.gbUsername))) {
+        if ((this.gbPwdSaved == null && other.gbPwdSaved != null) || (this.gbPwdSaved != null && !this.gbPwdSaved.equals(other.gbPwdSaved))) {
             return false;
         }
-        if ((this.gbPwdSaved == null && other.gbPwdSaved != null) || (this.gbPwdSaved != null && !this.gbPwdSaved.equals(other.gbPwdSaved))) {
+        if ((this.gbUsername == null && other.gbUsername != null) || (this.gbUsername != null && !this.gbUsername.equals(other.gbUsername))) {
             return false;
         }
         return true;
@@ -80,7 +79,7 @@ public class GbPwdHistoryPK implements Serializable {
 
     @Override
     public String toString() {
-        return "com.gabyval.referencesbo.GbPwdHistoryPK[ gbUsername=" + gbUsername + ", gbPwdSaved=" + gbPwdSaved + " ]";
+        return "com.gabyval.extractor.GbPwdHistoryPK[ gbPwdSaved=" + gbPwdSaved + ", gbUsername=" + gbUsername + " ]";
     }
     
 }

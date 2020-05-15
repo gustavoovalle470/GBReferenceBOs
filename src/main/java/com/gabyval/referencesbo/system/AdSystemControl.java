@@ -27,19 +27,18 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author OvalleGA
  */
 @Entity
-@Table(name = "ad_system_control", catalog = "db_gabyval", schema = "")
+@Table(name = "ad_system_control")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "AdSystemControl.findAll", query = "SELECT a FROM AdSystemControl a")
-    , @NamedQuery(name = "AdSystemControl.findBySystemControlId", query = "SELECT a FROM AdSystemControl a WHERE a.systemControlId = :systemControlId")
-    , @NamedQuery(name = "AdSystemControl.findBySystemPause", query = "SELECT a FROM AdSystemControl a WHERE a.systemPause = :systemPause")
-    , @NamedQuery(name = "AdSystemControl.findBySystemWorkDay", query = "SELECT a FROM AdSystemControl a WHERE a.systemWorkDay = :systemWorkDay")
-    , @NamedQuery(name = "AdSystemControl.findByLastCloseDt", query = "SELECT a FROM AdSystemControl a WHERE a.lastCloseDt = :lastCloseDt")
-    , @NamedQuery(name = "AdSystemControl.findByNextCloseDt", query = "SELECT a FROM AdSystemControl a WHERE a.nextCloseDt = :nextCloseDt")
-    , @NamedQuery(name = "AdSystemControl.findByCreateDt", query = "SELECT a FROM AdSystemControl a WHERE a.createDt = :createDt")
-    , @NamedQuery(name = "AdSystemControl.findByRowversion", query = "SELECT a FROM AdSystemControl a WHERE a.rowversion = :rowversion")})
+    @NamedQuery(name = "AdSystemControl.findAll", query = "SELECT a FROM AdSystemControl a"),
+    @NamedQuery(name = "AdSystemControl.findBySystemControlId", query = "SELECT a FROM AdSystemControl a WHERE a.systemControlId = :systemControlId"),
+    @NamedQuery(name = "AdSystemControl.findByCreateDt", query = "SELECT a FROM AdSystemControl a WHERE a.createDt = :createDt"),
+    @NamedQuery(name = "AdSystemControl.findByLastCloseDt", query = "SELECT a FROM AdSystemControl a WHERE a.lastCloseDt = :lastCloseDt"),
+    @NamedQuery(name = "AdSystemControl.findByNextCloseDt", query = "SELECT a FROM AdSystemControl a WHERE a.nextCloseDt = :nextCloseDt"),
+    @NamedQuery(name = "AdSystemControl.findByRowversion", query = "SELECT a FROM AdSystemControl a WHERE a.rowversion = :rowversion"),
+    @NamedQuery(name = "AdSystemControl.findBySystemPause", query = "SELECT a FROM AdSystemControl a WHERE a.systemPause = :systemPause"),
+    @NamedQuery(name = "AdSystemControl.findBySystemWorkDay", query = "SELECT a FROM AdSystemControl a WHERE a.systemWorkDay = :systemWorkDay")})
 public class AdSystemControl implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,14 +47,9 @@ public class AdSystemControl implements Serializable {
     private Integer systemControlId;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 1)
-    @Column(name = "SYSTEM_PAUSE")
-    private String systemPause;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 1)
-    @Column(name = "SYSTEM_WORK_DAY")
-    private String systemWorkDay;
+    @Column(name = "CREATE_DT")
+    @Temporal(TemporalType.DATE)
+    private Date createDt;
     @Basic(optional = false)
     @NotNull
     @Column(name = "LAST_CLOSE_DT")
@@ -68,12 +62,18 @@ public class AdSystemControl implements Serializable {
     private Date nextCloseDt;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "CREATE_DT")
-    @Temporal(TemporalType.DATE)
-    private Date createDt;
+    @Column(name = "rowversion")
+    private int rowversion;
     @Basic(optional = false)
     @NotNull
-    private int rowversion;
+    @Size(min = 1, max = 1)
+    @Column(name = "SYSTEM_PAUSE")
+    private String systemPause;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 1)
+    @Column(name = "SYSTEM_WORK_DAY")
+    private String systemWorkDay;
 
     public AdSystemControl() {
     }
@@ -82,14 +82,14 @@ public class AdSystemControl implements Serializable {
         this.systemControlId = systemControlId;
     }
 
-    public AdSystemControl(Integer systemControlId, String systemPause, String systemWorkDay, Date lastCloseDt, Date nextCloseDt, Date createDt, int rowversion) {
+    public AdSystemControl(Integer systemControlId, Date createDt, Date lastCloseDt, Date nextCloseDt, int rowversion, String systemPause, String systemWorkDay) {
         this.systemControlId = systemControlId;
-        this.systemPause = systemPause;
-        this.systemWorkDay = systemWorkDay;
+        this.createDt = createDt;
         this.lastCloseDt = lastCloseDt;
         this.nextCloseDt = nextCloseDt;
-        this.createDt = createDt;
         this.rowversion = rowversion;
+        this.systemPause = systemPause;
+        this.systemWorkDay = systemWorkDay;
     }
 
     public Integer getSystemControlId() {
@@ -100,20 +100,12 @@ public class AdSystemControl implements Serializable {
         this.systemControlId = systemControlId;
     }
 
-    public String getSystemPause() {
-        return systemPause;
+    public Date getCreateDt() {
+        return createDt;
     }
 
-    public void setSystemPause(String systemPause) {
-        this.systemPause = systemPause;
-    }
-
-    public String getSystemWorkDay() {
-        return systemWorkDay;
-    }
-
-    public void setSystemWorkDay(String systemWorkDay) {
-        this.systemWorkDay = systemWorkDay;
+    public void setCreateDt(Date createDt) {
+        this.createDt = createDt;
     }
 
     public Date getLastCloseDt() {
@@ -132,20 +124,28 @@ public class AdSystemControl implements Serializable {
         this.nextCloseDt = nextCloseDt;
     }
 
-    public Date getCreateDt() {
-        return createDt;
-    }
-
-    public void setCreateDt(Date createDt) {
-        this.createDt = createDt;
-    }
-
     public int getRowversion() {
         return rowversion;
     }
 
     public void setRowversion(int rowversion) {
         this.rowversion = rowversion;
+    }
+
+    public String getSystemPause() {
+        return systemPause;
+    }
+
+    public void setSystemPause(String systemPause) {
+        this.systemPause = systemPause;
+    }
+
+    public String getSystemWorkDay() {
+        return systemWorkDay;
+    }
+
+    public void setSystemWorkDay(String systemWorkDay) {
+        this.systemWorkDay = systemWorkDay;
     }
 
     @Override
@@ -170,7 +170,7 @@ public class AdSystemControl implements Serializable {
 
     @Override
     public String toString() {
-        return "com.gabyval.referencesbo.AdSystemControl[ systemControlId=" + systemControlId + " ]";
+        return "com.gabyval.extractor.AdSystemControl[ systemControlId=" + systemControlId + " ]";
     }
     
 }

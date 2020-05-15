@@ -29,20 +29,19 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author OvalleGA
  */
 @Entity
-@Table(name = "ad_job", catalog = "db_gabyval", schema = "")
+@Table(name = "ad_job")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "AdJob.findAll", query = "SELECT a FROM AdJob a")
-    , @NamedQuery(name = "AdJob.findByJobId", query = "SELECT a FROM AdJob a WHERE a.jobId = :jobId")
-    , @NamedQuery(name = "AdJob.findByJobName", query = "SELECT a FROM AdJob a WHERE a.jobName = :jobName")
-    , @NamedQuery(name = "AdJob.findByJobClass", query = "SELECT a FROM AdJob a WHERE a.jobClass = :jobClass")
-    , @NamedQuery(name = "AdJob.findByJobDesc", query = "SELECT a FROM AdJob a WHERE a.jobDesc = :jobDesc")
-    , @NamedQuery(name = "AdJob.findByExpCron", query = "SELECT a FROM AdJob a WHERE a.expCron = :expCron")
-    , @NamedQuery(name = "AdJob.findByAutoRun", query = "SELECT a FROM AdJob a WHERE a.autoRun = :autoRun")
-    , @NamedQuery(name = "AdJob.findByCreateDt", query = "SELECT a FROM AdJob a WHERE a.createDt = :createDt")
-    , @NamedQuery(name = "AdJob.findByRowversion", query = "SELECT a FROM AdJob a WHERE a.rowversion = :rowversion")})
+    @NamedQuery(name = "AdJob.findAll", query = "SELECT a FROM AdJob a"),
+    @NamedQuery(name = "AdJob.findByJobId", query = "SELECT a FROM AdJob a WHERE a.jobId = :jobId"),
+    @NamedQuery(name = "AdJob.findByAutoRun", query = "SELECT a FROM AdJob a WHERE a.autoRun = :autoRun"),
+    @NamedQuery(name = "AdJob.findByCreateDt", query = "SELECT a FROM AdJob a WHERE a.createDt = :createDt"),
+    @NamedQuery(name = "AdJob.findByExpCron", query = "SELECT a FROM AdJob a WHERE a.expCron = :expCron"),
+    @NamedQuery(name = "AdJob.findByJobClass", query = "SELECT a FROM AdJob a WHERE a.jobClass = :jobClass"),
+    @NamedQuery(name = "AdJob.findByJobDesc", query = "SELECT a FROM AdJob a WHERE a.jobDesc = :jobDesc"),
+    @NamedQuery(name = "AdJob.findByJobName", query = "SELECT a FROM AdJob a WHERE a.jobName = :jobName"),
+    @NamedQuery(name = "AdJob.findByRowversion", query = "SELECT a FROM AdJob a WHERE a.rowversion = :rowversion")})
 public class AdJob implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,9 +50,19 @@ public class AdJob implements Serializable {
     private Integer jobId;
     @Basic(optional = false)
     @NotNull
+    @Size(min = 1, max = 1)
+    @Column(name = "AUTO_RUN")
+    private String autoRun;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "CREATE_DT")
+    @Temporal(TemporalType.DATE)
+    private Date createDt;
+    @Basic(optional = false)
+    @NotNull
     @Size(min = 1, max = 50)
-    @Column(name = "JOB_NAME")
-    private String jobName;
+    @Column(name = "EXP_CRON")
+    private String expCron;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 200)
@@ -67,20 +76,11 @@ public class AdJob implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
-    @Column(name = "EXP_CRON")
-    private String expCron;
+    @Column(name = "JOB_NAME")
+    private String jobName;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 1)
-    @Column(name = "AUTO_RUN")
-    private String autoRun;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "CREATE_DT")
-    @Temporal(TemporalType.DATE)
-    private Date createDt;
-    @Basic(optional = false)
-    @NotNull
+    @Column(name = "rowversion")
     private int rowversion;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "adJob")
     private AdExecuteJob adExecuteJob;
@@ -92,14 +92,14 @@ public class AdJob implements Serializable {
         this.jobId = jobId;
     }
 
-    public AdJob(Integer jobId, String jobName, String jobClass, String jobDesc, String expCron, String autoRun, Date createDt, int rowversion) {
+    public AdJob(Integer jobId, String autoRun, Date createDt, String expCron, String jobClass, String jobDesc, String jobName, int rowversion) {
         this.jobId = jobId;
-        this.jobName = jobName;
-        this.jobClass = jobClass;
-        this.jobDesc = jobDesc;
-        this.expCron = expCron;
         this.autoRun = autoRun;
         this.createDt = createDt;
+        this.expCron = expCron;
+        this.jobClass = jobClass;
+        this.jobDesc = jobDesc;
+        this.jobName = jobName;
         this.rowversion = rowversion;
     }
 
@@ -111,12 +111,28 @@ public class AdJob implements Serializable {
         this.jobId = jobId;
     }
 
-    public String getJobName() {
-        return jobName;
+    public String getAutoRun() {
+        return autoRun;
     }
 
-    public void setJobName(String jobName) {
-        this.jobName = jobName;
+    public void setAutoRun(String autoRun) {
+        this.autoRun = autoRun;
+    }
+
+    public Date getCreateDt() {
+        return createDt;
+    }
+
+    public void setCreateDt(Date createDt) {
+        this.createDt = createDt;
+    }
+
+    public String getExpCron() {
+        return expCron;
+    }
+
+    public void setExpCron(String expCron) {
+        this.expCron = expCron;
     }
 
     public String getJobClass() {
@@ -135,28 +151,12 @@ public class AdJob implements Serializable {
         this.jobDesc = jobDesc;
     }
 
-    public String getExpCron() {
-        return expCron;
+    public String getJobName() {
+        return jobName;
     }
 
-    public void setExpCron(String expCron) {
-        this.expCron = expCron;
-    }
-
-    public String getAutoRun() {
-        return autoRun;
-    }
-
-    public void setAutoRun(String autoRun) {
-        this.autoRun = autoRun;
-    }
-
-    public Date getCreateDt() {
-        return createDt;
-    }
-
-    public void setCreateDt(Date createDt) {
-        this.createDt = createDt;
+    public void setJobName(String jobName) {
+        this.jobName = jobName;
     }
 
     public int getRowversion() {
@@ -197,7 +197,7 @@ public class AdJob implements Serializable {
 
     @Override
     public String toString() {
-        return "com.gabyval.referencesbo.AdJob[ jobId=" + jobId + " ]";
+        return "com.gabyval.extractor.AdJob[ jobId=" + jobId + " ]";
     }
     
 }

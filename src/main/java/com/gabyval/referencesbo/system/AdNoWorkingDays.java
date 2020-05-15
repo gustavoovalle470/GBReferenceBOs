@@ -27,17 +27,16 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author OvalleGA
  */
 @Entity
-@Table(name = "ad_no_working_days", catalog = "db_gabyval", schema = "")
+@Table(name = "ad_no_working_days")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "AdNoWorkingDays.findAll", query = "SELECT a FROM AdNoWorkingDays a")
-    , @NamedQuery(name = "AdNoWorkingDays.findByNoWorkingDayId", query = "SELECT a FROM AdNoWorkingDays a WHERE a.noWorkingDayId = :noWorkingDayId")
-    , @NamedQuery(name = "AdNoWorkingDays.findByNoWorkingDate", query = "SELECT a FROM AdNoWorkingDays a WHERE a.noWorkingDate = :noWorkingDate")
-    , @NamedQuery(name = "AdNoWorkingDays.findByDateDescription", query = "SELECT a FROM AdNoWorkingDays a WHERE a.dateDescription = :dateDescription")
-    , @NamedQuery(name = "AdNoWorkingDays.findByCreateDt", query = "SELECT a FROM AdNoWorkingDays a WHERE a.createDt = :createDt")
-    , @NamedQuery(name = "AdNoWorkingDays.findByRowversion", query = "SELECT a FROM AdNoWorkingDays a WHERE a.rowversion = :rowversion")})
+    @NamedQuery(name = "AdNoWorkingDays.findAll", query = "SELECT a FROM AdNoWorkingDays a"),
+    @NamedQuery(name = "AdNoWorkingDays.findByNoWorkingDayId", query = "SELECT a FROM AdNoWorkingDays a WHERE a.noWorkingDayId = :noWorkingDayId"),
+    @NamedQuery(name = "AdNoWorkingDays.findByCreateDt", query = "SELECT a FROM AdNoWorkingDays a WHERE a.createDt = :createDt"),
+    @NamedQuery(name = "AdNoWorkingDays.findByDateDescription", query = "SELECT a FROM AdNoWorkingDays a WHERE a.dateDescription = :dateDescription"),
+    @NamedQuery(name = "AdNoWorkingDays.findByNoWorkingDate", query = "SELECT a FROM AdNoWorkingDays a WHERE a.noWorkingDate = :noWorkingDate"),
+    @NamedQuery(name = "AdNoWorkingDays.findByRowversion", query = "SELECT a FROM AdNoWorkingDays a WHERE a.rowversion = :rowversion")})
 public class AdNoWorkingDays implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,9 +45,9 @@ public class AdNoWorkingDays implements Serializable {
     private Integer noWorkingDayId;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "NO_WORKING_DATE")
+    @Column(name = "CREATE_DT")
     @Temporal(TemporalType.DATE)
-    private Date noWorkingDate;
+    private Date createDt;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
@@ -56,11 +55,12 @@ public class AdNoWorkingDays implements Serializable {
     private String dateDescription;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "CREATE_DT")
+    @Column(name = "NO_WORKING_DATE")
     @Temporal(TemporalType.DATE)
-    private Date createDt;
+    private Date noWorkingDate;
     @Basic(optional = false)
     @NotNull
+    @Column(name = "rowversion")
     private int rowversion;
 
     public AdNoWorkingDays() {
@@ -70,11 +70,11 @@ public class AdNoWorkingDays implements Serializable {
         this.noWorkingDayId = noWorkingDayId;
     }
 
-    public AdNoWorkingDays(Integer noWorkingDayId, Date noWorkingDate, String dateDescription, Date createDt, int rowversion) {
+    public AdNoWorkingDays(Integer noWorkingDayId, Date createDt, String dateDescription, Date noWorkingDate, int rowversion) {
         this.noWorkingDayId = noWorkingDayId;
-        this.noWorkingDate = noWorkingDate;
-        this.dateDescription = dateDescription;
         this.createDt = createDt;
+        this.dateDescription = dateDescription;
+        this.noWorkingDate = noWorkingDate;
         this.rowversion = rowversion;
     }
 
@@ -86,12 +86,12 @@ public class AdNoWorkingDays implements Serializable {
         this.noWorkingDayId = noWorkingDayId;
     }
 
-    public Date getNoWorkingDate() {
-        return noWorkingDate;
+    public Date getCreateDt() {
+        return createDt;
     }
 
-    public void setNoWorkingDate(Date noWorkingDate) {
-        this.noWorkingDate = noWorkingDate;
+    public void setCreateDt(Date createDt) {
+        this.createDt = createDt;
     }
 
     public String getDateDescription() {
@@ -102,12 +102,12 @@ public class AdNoWorkingDays implements Serializable {
         this.dateDescription = dateDescription;
     }
 
-    public Date getCreateDt() {
-        return createDt;
+    public Date getNoWorkingDate() {
+        return noWorkingDate;
     }
 
-    public void setCreateDt(Date createDt) {
-        this.createDt = createDt;
+    public void setNoWorkingDate(Date noWorkingDate) {
+        this.noWorkingDate = noWorkingDate;
     }
 
     public int getRowversion() {
@@ -140,7 +140,7 @@ public class AdNoWorkingDays implements Serializable {
 
     @Override
     public String toString() {
-        return "com.gabyval.referencesbo.AdNoWorkingDays[ noWorkingDayId=" + noWorkingDayId + " ]";
+        return "com.gabyval.extractor.AdNoWorkingDays[ noWorkingDayId=" + noWorkingDayId + " ]";
     }
     
 }

@@ -5,7 +5,6 @@
  */
 package com.gabyval.referencesbo.security.users;
 
-import com.gabyval.referencesbo.security.users.GbUsers;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -27,26 +26,19 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author OvalleGA
  */
 @Entity
-@Table(name = "gb_pwd_history", catalog = "db_gabyval", schema = "")
+@Table(name = "gb_pwd_history")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "GbPwdHistory.findAll", query = "SELECT g FROM GbPwdHistory g")
-    , @NamedQuery(name = "GbPwdHistory.findByGbUsername", query = "SELECT g FROM GbPwdHistory g WHERE g.gbPwdHistoryPK.gbUsername = :gbUsername")
-    , @NamedQuery(name = "GbPwdHistory.findByGbPwdSaved", query = "SELECT g FROM GbPwdHistory g WHERE g.gbPwdHistoryPK.gbPwdSaved = :gbPwdSaved")
-    , @NamedQuery(name = "GbPwdHistory.findByGbPwdInsDt", query = "SELECT g FROM GbPwdHistory g WHERE g.gbPwdInsDt = :gbPwdInsDt")
-    , @NamedQuery(name = "GbPwdHistory.findByCreateDt", query = "SELECT g FROM GbPwdHistory g WHERE g.createDt = :createDt")
-    , @NamedQuery(name = "GbPwdHistory.findByRowversion", query = "SELECT g FROM GbPwdHistory g WHERE g.rowversion = :rowversion")
-    , @NamedQuery(name = "GbPwdHistory.findFirstEntry", query = "SELECT g FROM GbPwdHistory g WHERE g.gbPwdHistoryPK.gbUsername=:gbUsername1 AND g.gbPwdInsDt =(SELECT MIN(g2.gbPwdInsDt) FROM GbPwdHistory g2 where g2.gbPwdHistoryPK.gbUsername=:gbUsername2)")})
+    @NamedQuery(name = "GbPwdHistory.findAll", query = "SELECT g FROM GbPwdHistory g"),
+    @NamedQuery(name = "GbPwdHistory.findByGbPwdSaved", query = "SELECT g FROM GbPwdHistory g WHERE g.gbPwdHistoryPK.gbPwdSaved = :gbPwdSaved"),
+    @NamedQuery(name = "GbPwdHistory.findByGbUsername", query = "SELECT g FROM GbPwdHistory g WHERE g.gbPwdHistoryPK.gbUsername = :gbUsername"),
+    @NamedQuery(name = "GbPwdHistory.findByCreateDt", query = "SELECT g FROM GbPwdHistory g WHERE g.createDt = :createDt"),
+    @NamedQuery(name = "GbPwdHistory.findByGbPwdInsDt", query = "SELECT g FROM GbPwdHistory g WHERE g.gbPwdInsDt = :gbPwdInsDt"),
+    @NamedQuery(name = "GbPwdHistory.findByRowversion", query = "SELECT g FROM GbPwdHistory g WHERE g.rowversion = :rowversion")})
 public class GbPwdHistory implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected GbPwdHistoryPK gbPwdHistoryPK;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "GB_PWD_INS_DT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date gbPwdInsDt;
     @Basic(optional = false)
     @NotNull
     @Column(name = "CREATE_DT")
@@ -54,6 +46,12 @@ public class GbPwdHistory implements Serializable {
     private Date createDt;
     @Basic(optional = false)
     @NotNull
+    @Column(name = "GB_PWD_INS_DT")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date gbPwdInsDt;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "rowversion")
     private int rowversion;
     @JoinColumn(name = "GB_USERNAME", referencedColumnName = "GB_USERNAME", insertable = false, updatable = false)
     @ManyToOne(optional = false)
@@ -66,15 +64,15 @@ public class GbPwdHistory implements Serializable {
         this.gbPwdHistoryPK = gbPwdHistoryPK;
     }
 
-    public GbPwdHistory(GbPwdHistoryPK gbPwdHistoryPK, Date gbPwdInsDt, Date createDt, int rowversion) {
+    public GbPwdHistory(GbPwdHistoryPK gbPwdHistoryPK, Date createDt, Date gbPwdInsDt, int rowversion) {
         this.gbPwdHistoryPK = gbPwdHistoryPK;
-        this.gbPwdInsDt = gbPwdInsDt;
         this.createDt = createDt;
+        this.gbPwdInsDt = gbPwdInsDt;
         this.rowversion = rowversion;
     }
 
-    public GbPwdHistory(String gbUsername, String gbPwdSaved) {
-        this.gbPwdHistoryPK = new GbPwdHistoryPK(gbUsername, gbPwdSaved);
+    public GbPwdHistory(String gbPwdSaved, String gbUsername) {
+        this.gbPwdHistoryPK = new GbPwdHistoryPK(gbPwdSaved, gbUsername);
     }
 
     public GbPwdHistoryPK getGbPwdHistoryPK() {
@@ -85,20 +83,20 @@ public class GbPwdHistory implements Serializable {
         this.gbPwdHistoryPK = gbPwdHistoryPK;
     }
 
-    public Date getGbPwdInsDt() {
-        return gbPwdInsDt;
-    }
-
-    public void setGbPwdInsDt(Date gbPwdInsDt) {
-        this.gbPwdInsDt = gbPwdInsDt;
-    }
-
     public Date getCreateDt() {
         return createDt;
     }
 
     public void setCreateDt(Date createDt) {
         this.createDt = createDt;
+    }
+
+    public Date getGbPwdInsDt() {
+        return gbPwdInsDt;
+    }
+
+    public void setGbPwdInsDt(Date gbPwdInsDt) {
+        this.gbPwdInsDt = gbPwdInsDt;
     }
 
     public int getRowversion() {
@@ -139,7 +137,7 @@ public class GbPwdHistory implements Serializable {
 
     @Override
     public String toString() {
-        return "com.gabyval.referencesbo.GbPwdHistory[ gbPwdHistoryPK=" + gbPwdHistoryPK + " ]";
+        return "com.gabyval.extractor.GbPwdHistory[ gbPwdHistoryPK=" + gbPwdHistoryPK + " ]";
     }
     
 }

@@ -20,7 +20,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -28,37 +27,21 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author OvalleGA
  */
 @Entity
-@Table(name = "gb_user_profiling", catalog = "db_gabyval", schema = "")
+@Table(name = "gb_user_profiling")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "GbUserProfiling.findAll", query = "SELECT g FROM GbUserProfiling g")
-    , @NamedQuery(name = "GbUserProfiling.findByGbUsername", query = "SELECT g FROM GbUserProfiling g WHERE g.gbUserProfilingPK.gbUsername = :gbUsername")
-    , @NamedQuery(name = "GbUserProfiling.findByGbProfile", query = "SELECT g FROM GbUserProfiling g WHERE g.gbUserProfilingPK.gbProfile = :gbProfile")
-    , @NamedQuery(name = "GbUserProfiling.findByGbUserCreate", query = "SELECT g FROM GbUserProfiling g WHERE g.gbUserCreate = :gbUserCreate")
-    , @NamedQuery(name = "GbUserProfiling.findByGbLastUserUp", query = "SELECT g FROM GbUserProfiling g WHERE g.gbLastUserUp = :gbLastUserUp")
-    , @NamedQuery(name = "GbUserProfiling.findByGbLastUpDt", query = "SELECT g FROM GbUserProfiling g WHERE g.gbLastUpDt = :gbLastUpDt")
-    , @NamedQuery(name = "GbUserProfiling.findByCreateDt", query = "SELECT g FROM GbUserProfiling g WHERE g.createDt = :createDt")
-    , @NamedQuery(name = "GbUserProfiling.findByRowversion", query = "SELECT g FROM GbUserProfiling g WHERE g.rowversion = :rowversion")})
+    @NamedQuery(name = "GbUserProfiling.findAll", query = "SELECT g FROM GbUserProfiling g"),
+    @NamedQuery(name = "GbUserProfiling.findByGbProfile", query = "SELECT g FROM GbUserProfiling g WHERE g.gbUserProfilingPK.gbProfile = :gbProfile"),
+    @NamedQuery(name = "GbUserProfiling.findByGbUsername", query = "SELECT g FROM GbUserProfiling g WHERE g.gbUserProfilingPK.gbUsername = :gbUsername"),
+    @NamedQuery(name = "GbUserProfiling.findByCreateDt", query = "SELECT g FROM GbUserProfiling g WHERE g.createDt = :createDt"),
+    @NamedQuery(name = "GbUserProfiling.findByGbLastUpDt", query = "SELECT g FROM GbUserProfiling g WHERE g.gbLastUpDt = :gbLastUpDt"),
+    @NamedQuery(name = "GbUserProfiling.findByGbLastUserUp", query = "SELECT g FROM GbUserProfiling g WHERE g.gbUserProfilingPK.gbLastUserUp = :gbLastUserUp"),
+    @NamedQuery(name = "GbUserProfiling.findByGbUserCreate", query = "SELECT g FROM GbUserProfiling g WHERE g.gbUserProfilingPK.gbUserCreate = :gbUserCreate"),
+    @NamedQuery(name = "GbUserProfiling.findByRowversion", query = "SELECT g FROM GbUserProfiling g WHERE g.rowversion = :rowversion")})
 public class GbUserProfiling implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected GbUserProfilingPK gbUserProfilingPK;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
-    @Column(name = "GB_USER_CREATE")
-    private String gbUserCreate;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
-    @Column(name = "GB_LAST_USER_UP")
-    private String gbLastUserUp;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "GB_LAST_UP_DT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date gbLastUpDt;
     @Basic(optional = false)
     @NotNull
     @Column(name = "CREATE_DT")
@@ -66,6 +49,12 @@ public class GbUserProfiling implements Serializable {
     private Date createDt;
     @Basic(optional = false)
     @NotNull
+    @Column(name = "GB_LAST_UP_DT")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date gbLastUpDt;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "rowversion")
     private int rowversion;
     @JoinColumn(name = "GB_PROFILE", referencedColumnName = "GB_PROFILE", insertable = false, updatable = false)
     @ManyToOne(optional = false)
@@ -73,6 +62,12 @@ public class GbUserProfiling implements Serializable {
     @JoinColumn(name = "GB_USERNAME", referencedColumnName = "GB_USERNAME", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private GbUsers gbUsers;
+    @JoinColumn(name = "GB_USER_CREATE", referencedColumnName = "GB_USERNAME", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private GbUsers gbUsers1;
+    @JoinColumn(name = "GB_LAST_USER_UP", referencedColumnName = "GB_USERNAME", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private GbUsers gbUsers2;
 
     public GbUserProfiling() {
     }
@@ -81,17 +76,15 @@ public class GbUserProfiling implements Serializable {
         this.gbUserProfilingPK = gbUserProfilingPK;
     }
 
-    public GbUserProfiling(GbUserProfilingPK gbUserProfilingPK, String gbUserCreate, String gbLastUserUp, Date gbLastUpDt, Date createDt, int rowversion) {
+    public GbUserProfiling(GbUserProfilingPK gbUserProfilingPK, Date createDt, Date gbLastUpDt, int rowversion) {
         this.gbUserProfilingPK = gbUserProfilingPK;
-        this.gbUserCreate = gbUserCreate;
-        this.gbLastUserUp = gbLastUserUp;
-        this.gbLastUpDt = gbLastUpDt;
         this.createDt = createDt;
+        this.gbLastUpDt = gbLastUpDt;
         this.rowversion = rowversion;
     }
 
-    public GbUserProfiling(String gbUsername, String gbProfile) {
-        this.gbUserProfilingPK = new GbUserProfilingPK(gbUsername, gbProfile);
+    public GbUserProfiling(String gbProfile, String gbUsername, String gbLastUserUp, String gbUserCreate) {
+        this.gbUserProfilingPK = new GbUserProfilingPK(gbProfile, gbUsername, gbLastUserUp, gbUserCreate);
     }
 
     public GbUserProfilingPK getGbUserProfilingPK() {
@@ -102,20 +95,12 @@ public class GbUserProfiling implements Serializable {
         this.gbUserProfilingPK = gbUserProfilingPK;
     }
 
-    public String getGbUserCreate() {
-        return gbUserCreate;
+    public Date getCreateDt() {
+        return createDt;
     }
 
-    public void setGbUserCreate(String gbUserCreate) {
-        this.gbUserCreate = gbUserCreate;
-    }
-
-    public String getGbLastUserUp() {
-        return gbLastUserUp;
-    }
-
-    public void setGbLastUserUp(String gbLastUserUp) {
-        this.gbLastUserUp = gbLastUserUp;
+    public void setCreateDt(Date createDt) {
+        this.createDt = createDt;
     }
 
     public Date getGbLastUpDt() {
@@ -124,14 +109,6 @@ public class GbUserProfiling implements Serializable {
 
     public void setGbLastUpDt(Date gbLastUpDt) {
         this.gbLastUpDt = gbLastUpDt;
-    }
-
-    public Date getCreateDt() {
-        return createDt;
-    }
-
-    public void setCreateDt(Date createDt) {
-        this.createDt = createDt;
     }
 
     public int getRowversion() {
@@ -158,6 +135,22 @@ public class GbUserProfiling implements Serializable {
         this.gbUsers = gbUsers;
     }
 
+    public GbUsers getGbUsers1() {
+        return gbUsers1;
+    }
+
+    public void setGbUsers1(GbUsers gbUsers1) {
+        this.gbUsers1 = gbUsers1;
+    }
+
+    public GbUsers getGbUsers2() {
+        return gbUsers2;
+    }
+
+    public void setGbUsers2(GbUsers gbUsers2) {
+        this.gbUsers2 = gbUsers2;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -180,7 +173,7 @@ public class GbUserProfiling implements Serializable {
 
     @Override
     public String toString() {
-        return "com.gabyval.referencesbo.GbUserProfiling[ gbUserProfilingPK=" + gbUserProfilingPK + " ]";
+        return "com.gabyval.extractor.GbUserProfiling[ gbUserProfilingPK=" + gbUserProfilingPK + " ]";
     }
     
 }

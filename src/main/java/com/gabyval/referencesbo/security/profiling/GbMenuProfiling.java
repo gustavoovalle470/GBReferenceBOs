@@ -6,6 +6,7 @@
 package com.gabyval.referencesbo.security.profiling;
 
 import com.gabyval.referencesbo.security.menu.GbMenulinks;
+import com.gabyval.referencesbo.security.users.GbUsers;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -27,16 +28,16 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author OvalleGA
  */
 @Entity
-@Table(name = "gb_menu_profiling", catalog = "db_gabyval", schema = "")
+@Table(name = "gb_menu_profiling")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "GbMenuProfiling.findAll", query = "SELECT g FROM GbMenuProfiling g")
-    , @NamedQuery(name = "GbMenuProfiling.findByGbProfile", query = "SELECT g FROM GbMenuProfiling g WHERE g.gbMenuProfilingPK.gbProfile = :gbProfile")
-    , @NamedQuery(name = "GbMenuProfiling.findByGbMenuId", query = "SELECT g FROM GbMenuProfiling g WHERE g.gbMenuProfilingPK.gbMenuId = :gbMenuId")
-    , @NamedQuery(name = "GbMenuProfiling.findByCreateDt", query = "SELECT g FROM GbMenuProfiling g WHERE g.createDt = :createDt")
-    , @NamedQuery(name = "GbMenuProfiling.findByRowversion", query = "SELECT g FROM GbMenuProfiling g WHERE g.rowversion = :rowversion")})
+    @NamedQuery(name = "GbMenuProfiling.findAll", query = "SELECT g FROM GbMenuProfiling g"),
+    @NamedQuery(name = "GbMenuProfiling.findByGbMenuId", query = "SELECT g FROM GbMenuProfiling g WHERE g.gbMenuProfilingPK.gbMenuId = :gbMenuId"),
+    @NamedQuery(name = "GbMenuProfiling.findByGbProfile", query = "SELECT g FROM GbMenuProfiling g WHERE g.gbMenuProfilingPK.gbProfile = :gbProfile"),
+    @NamedQuery(name = "GbMenuProfiling.findByGbUserCreate", query = "SELECT g FROM GbMenuProfiling g WHERE g.gbMenuProfilingPK.gbUserCreate = :gbUserCreate"),
+    @NamedQuery(name = "GbMenuProfiling.findByCreateDt", query = "SELECT g FROM GbMenuProfiling g WHERE g.createDt = :createDt"),
+    @NamedQuery(name = "GbMenuProfiling.findByRowversion", query = "SELECT g FROM GbMenuProfiling g WHERE g.rowversion = :rowversion")})
 public class GbMenuProfiling implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected GbMenuProfilingPK gbMenuProfilingPK;
@@ -47,6 +48,7 @@ public class GbMenuProfiling implements Serializable {
     private Date createDt;
     @Basic(optional = false)
     @NotNull
+    @Column(name = "ROWVERSION")
     private int rowversion;
     @JoinColumn(name = "GB_MENU_ID", referencedColumnName = "GB_MENU_ID", insertable = false, updatable = false)
     @ManyToOne(optional = false)
@@ -54,6 +56,9 @@ public class GbMenuProfiling implements Serializable {
     @JoinColumn(name = "GB_PROFILE", referencedColumnName = "GB_PROFILE", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private GbSecurityProfile gbSecurityProfile;
+    @JoinColumn(name = "GB_USER_CREATE", referencedColumnName = "GB_USERNAME", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private GbUsers gbUsers;
 
     public GbMenuProfiling() {
     }
@@ -68,8 +73,8 @@ public class GbMenuProfiling implements Serializable {
         this.rowversion = rowversion;
     }
 
-    public GbMenuProfiling(String gbProfile, String gbMenuId) {
-        this.gbMenuProfilingPK = new GbMenuProfilingPK(gbProfile, gbMenuId);
+    public GbMenuProfiling(int gbMenuId, String gbProfile, String gbUserCreate) {
+        this.gbMenuProfilingPK = new GbMenuProfilingPK(gbMenuId, gbProfile, gbUserCreate);
     }
 
     public GbMenuProfilingPK getGbMenuProfilingPK() {
@@ -112,6 +117,14 @@ public class GbMenuProfiling implements Serializable {
         this.gbSecurityProfile = gbSecurityProfile;
     }
 
+    public GbUsers getGbUsers() {
+        return gbUsers;
+    }
+
+    public void setGbUsers(GbUsers gbUsers) {
+        this.gbUsers = gbUsers;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -134,7 +147,7 @@ public class GbMenuProfiling implements Serializable {
 
     @Override
     public String toString() {
-        return "com.gabyval.referencesbo.GbMenuProfiling[ gbMenuProfilingPK=" + gbMenuProfilingPK + " ]";
+        return "com.gabyval.extractor.GbMenuProfiling[ gbMenuProfilingPK=" + gbMenuProfilingPK + " ]";
     }
     
 }

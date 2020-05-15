@@ -25,17 +25,16 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author OvalleGA
  */
 @Entity
-@Table(name = "ad_id_control", catalog = "db_gabyval", schema = "")
+@Table(name = "ad_id_control")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "AdIdControl.findAll", query = "SELECT a FROM AdIdControl a")
-    , @NamedQuery(name = "AdIdControl.findByNomTabla", query = "SELECT a FROM AdIdControl a WHERE a.nomTabla = :nomTabla")
-    , @NamedQuery(name = "AdIdControl.findByNumCtrl", query = "SELECT a FROM AdIdControl a WHERE a.numCtrl = :numCtrl")
-    , @NamedQuery(name = "AdIdControl.findByNumInc", query = "SELECT a FROM AdIdControl a WHERE a.numInc = :numInc")
-    , @NamedQuery(name = "AdIdControl.findByCreateDt", query = "SELECT a FROM AdIdControl a WHERE a.createDt = :createDt")
-    , @NamedQuery(name = "AdIdControl.findByRowversion", query = "SELECT a FROM AdIdControl a WHERE a.rowversion = :rowversion")})
+    @NamedQuery(name = "AdIdControl.findAll", query = "SELECT a FROM AdIdControl a"),
+    @NamedQuery(name = "AdIdControl.findByNomTabla", query = "SELECT a FROM AdIdControl a WHERE a.nomTabla = :nomTabla"),
+    @NamedQuery(name = "AdIdControl.findByCreateDt", query = "SELECT a FROM AdIdControl a WHERE a.createDt = :createDt"),
+    @NamedQuery(name = "AdIdControl.findByNumCtrl", query = "SELECT a FROM AdIdControl a WHERE a.numCtrl = :numCtrl"),
+    @NamedQuery(name = "AdIdControl.findByNumInc", query = "SELECT a FROM AdIdControl a WHERE a.numInc = :numInc"),
+    @NamedQuery(name = "AdIdControl.findByRowversion", query = "SELECT a FROM AdIdControl a WHERE a.rowversion = :rowversion")})
 public class AdIdControl implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -43,6 +42,9 @@ public class AdIdControl implements Serializable {
     @Size(min = 1, max = 30)
     @Column(name = "NOM_TABLA")
     private String nomTabla;
+    @Column(name = "CREATE_DT")
+    @Temporal(TemporalType.DATE)
+    private Date createDt;
     @Basic(optional = false)
     @NotNull
     @Column(name = "NUM_CTRL")
@@ -51,9 +53,7 @@ public class AdIdControl implements Serializable {
     @NotNull
     @Column(name = "NUM_INC")
     private int numInc;
-    @Column(name = "CREATE_DT")
-    @Temporal(TemporalType.DATE)
-    private Date createDt;
+    @Column(name = "rowversion")
     private Integer rowversion;
 
     public AdIdControl() {
@@ -77,6 +77,14 @@ public class AdIdControl implements Serializable {
         this.nomTabla = nomTabla;
     }
 
+    public Date getCreateDt() {
+        return createDt;
+    }
+
+    public void setCreateDt(Date createDt) {
+        this.createDt = createDt;
+    }
+
     public int getNumCtrl() {
         return numCtrl;
     }
@@ -91,14 +99,6 @@ public class AdIdControl implements Serializable {
 
     public void setNumInc(int numInc) {
         this.numInc = numInc;
-    }
-
-    public Date getCreateDt() {
-        return createDt;
-    }
-
-    public void setCreateDt(Date createDt) {
-        this.createDt = createDt;
     }
 
     public Integer getRowversion() {
@@ -131,7 +131,7 @@ public class AdIdControl implements Serializable {
 
     @Override
     public String toString() {
-        return "com.gabyval.referencesbo.AdIdControl[ nomTabla=" + nomTabla + " ]";
+        return "com.gabyval.extractor.AdIdControl[ nomTabla=" + nomTabla + " ]";
     }
     
 }

@@ -18,23 +18,35 @@ import javax.validation.constraints.Size;
  */
 @Embeddable
 public class GbMenuProfilingPK implements Serializable {
-
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 100)
+    @Column(name = "GB_MENU_ID")
+    private int gbMenuId;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
     @Column(name = "GB_PROFILE")
     private String gbProfile;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
-    @Column(name = "GB_MENU_ID")
-    private String gbMenuId;
+    @Column(name = "GB_USER_CREATE")
+    private String gbUserCreate;
 
     public GbMenuProfilingPK() {
     }
 
-    public GbMenuProfilingPK(String gbProfile, String gbMenuId) {
+    public GbMenuProfilingPK(int gbMenuId, String gbProfile, String gbUserCreate) {
+        this.gbMenuId = gbMenuId;
         this.gbProfile = gbProfile;
+        this.gbUserCreate = gbUserCreate;
+    }
+
+    public int getGbMenuId() {
+        return gbMenuId;
+    }
+
+    public void setGbMenuId(int gbMenuId) {
         this.gbMenuId = gbMenuId;
     }
 
@@ -46,19 +58,20 @@ public class GbMenuProfilingPK implements Serializable {
         this.gbProfile = gbProfile;
     }
 
-    public String getGbMenuId() {
-        return gbMenuId;
+    public String getGbUserCreate() {
+        return gbUserCreate;
     }
 
-    public void setGbMenuId(String gbMenuId) {
-        this.gbMenuId = gbMenuId;
+    public void setGbUserCreate(String gbUserCreate) {
+        this.gbUserCreate = gbUserCreate;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
+        hash += (int) gbMenuId;
         hash += (gbProfile != null ? gbProfile.hashCode() : 0);
-        hash += (gbMenuId != null ? gbMenuId.hashCode() : 0);
+        hash += (gbUserCreate != null ? gbUserCreate.hashCode() : 0);
         return hash;
     }
 
@@ -69,10 +82,13 @@ public class GbMenuProfilingPK implements Serializable {
             return false;
         }
         GbMenuProfilingPK other = (GbMenuProfilingPK) object;
+        if (this.gbMenuId != other.gbMenuId) {
+            return false;
+        }
         if ((this.gbProfile == null && other.gbProfile != null) || (this.gbProfile != null && !this.gbProfile.equals(other.gbProfile))) {
             return false;
         }
-        if ((this.gbMenuId == null && other.gbMenuId != null) || (this.gbMenuId != null && !this.gbMenuId.equals(other.gbMenuId))) {
+        if ((this.gbUserCreate == null && other.gbUserCreate != null) || (this.gbUserCreate != null && !this.gbUserCreate.equals(other.gbUserCreate))) {
             return false;
         }
         return true;
@@ -80,7 +96,7 @@ public class GbMenuProfilingPK implements Serializable {
 
     @Override
     public String toString() {
-        return "com.gabyval.referencesbo.GbMenuProfilingPK[ gbProfile=" + gbProfile + ", gbMenuId=" + gbMenuId + " ]";
+        return "com.gabyval.extractor.GbMenuProfilingPK[ gbMenuId=" + gbMenuId + ", gbProfile=" + gbProfile + ", gbUserCreate=" + gbUserCreate + " ]";
     }
     
 }

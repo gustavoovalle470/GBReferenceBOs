@@ -27,25 +27,34 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author OvalleGA
  */
 @Entity
-@Table(name = "ad_module_configuration", catalog = "db_gabyval", schema = "")
+@Table(name = "ad_module_configuration")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "AdModuleConfiguration.findAll", query = "SELECT a FROM AdModuleConfiguration a")
-    , @NamedQuery(name = "AdModuleConfiguration.findByModuleConfigId", query = "SELECT a FROM AdModuleConfiguration a WHERE a.moduleConfigId = :moduleConfigId")
-    , @NamedQuery(name = "AdModuleConfiguration.findByModuleConfigName", query = "SELECT a FROM AdModuleConfiguration a WHERE a.moduleConfigName = :moduleConfigName")
-    , @NamedQuery(name = "AdModuleConfiguration.findByModuleConfigType", query = "SELECT a FROM AdModuleConfiguration a WHERE a.moduleConfigType = :moduleConfigType")
-    , @NamedQuery(name = "AdModuleConfiguration.findByModuleConfigValue", query = "SELECT a FROM AdModuleConfiguration a WHERE a.moduleConfigValue = :moduleConfigValue")
-    , @NamedQuery(name = "AdModuleConfiguration.findByModuleConfigDesc", query = "SELECT a FROM AdModuleConfiguration a WHERE a.moduleConfigDesc = :moduleConfigDesc")
-    , @NamedQuery(name = "AdModuleConfiguration.findByCreateDt", query = "SELECT a FROM AdModuleConfiguration a WHERE a.createDt = :createDt")
-    , @NamedQuery(name = "AdModuleConfiguration.findByRowversion", query = "SELECT a FROM AdModuleConfiguration a WHERE a.rowversion = :rowversion")})
+    @NamedQuery(name = "AdModuleConfiguration.findAll", query = "SELECT a FROM AdModuleConfiguration a"),
+    @NamedQuery(name = "AdModuleConfiguration.findByModuleConfigId", query = "SELECT a FROM AdModuleConfiguration a WHERE a.moduleConfigId = :moduleConfigId"),
+    @NamedQuery(name = "AdModuleConfiguration.findByCreateDt", query = "SELECT a FROM AdModuleConfiguration a WHERE a.createDt = :createDt"),
+    @NamedQuery(name = "AdModuleConfiguration.findByModuleConfigDesc", query = "SELECT a FROM AdModuleConfiguration a WHERE a.moduleConfigDesc = :moduleConfigDesc"),
+    @NamedQuery(name = "AdModuleConfiguration.findByModuleConfigName", query = "SELECT a FROM AdModuleConfiguration a WHERE a.moduleConfigName = :moduleConfigName"),
+    @NamedQuery(name = "AdModuleConfiguration.findByModuleConfigType", query = "SELECT a FROM AdModuleConfiguration a WHERE a.moduleConfigType = :moduleConfigType"),
+    @NamedQuery(name = "AdModuleConfiguration.findByModuleConfigValue", query = "SELECT a FROM AdModuleConfiguration a WHERE a.moduleConfigValue = :moduleConfigValue"),
+    @NamedQuery(name = "AdModuleConfiguration.findByRowversion", query = "SELECT a FROM AdModuleConfiguration a WHERE a.rowversion = :rowversion")})
 public class AdModuleConfiguration implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "MODULE_CONFIG_ID")
     private Integer moduleConfigId;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "CREATE_DT")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createDt;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 150)
+    @Column(name = "MODULE_CONFIG_DESC")
+    private String moduleConfigDesc;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 30)
@@ -63,16 +72,7 @@ public class AdModuleConfiguration implements Serializable {
     private String moduleConfigValue;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 150)
-    @Column(name = "MODULE_CONFIG_DESC")
-    private String moduleConfigDesc;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "CREATE_DT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createDt;
-    @Basic(optional = false)
-    @NotNull
+    @Column(name = "rowversion")
     private int rowversion;
 
     public AdModuleConfiguration() {
@@ -82,13 +82,13 @@ public class AdModuleConfiguration implements Serializable {
         this.moduleConfigId = moduleConfigId;
     }
 
-    public AdModuleConfiguration(Integer moduleConfigId, String moduleConfigName, String moduleConfigType, String moduleConfigValue, String moduleConfigDesc, Date createDt, int rowversion) {
+    public AdModuleConfiguration(Integer moduleConfigId, Date createDt, String moduleConfigDesc, String moduleConfigName, String moduleConfigType, String moduleConfigValue, int rowversion) {
         this.moduleConfigId = moduleConfigId;
+        this.createDt = createDt;
+        this.moduleConfigDesc = moduleConfigDesc;
         this.moduleConfigName = moduleConfigName;
         this.moduleConfigType = moduleConfigType;
         this.moduleConfigValue = moduleConfigValue;
-        this.moduleConfigDesc = moduleConfigDesc;
-        this.createDt = createDt;
         this.rowversion = rowversion;
     }
 
@@ -98,6 +98,22 @@ public class AdModuleConfiguration implements Serializable {
 
     public void setModuleConfigId(Integer moduleConfigId) {
         this.moduleConfigId = moduleConfigId;
+    }
+
+    public Date getCreateDt() {
+        return createDt;
+    }
+
+    public void setCreateDt(Date createDt) {
+        this.createDt = createDt;
+    }
+
+    public String getModuleConfigDesc() {
+        return moduleConfigDesc;
+    }
+
+    public void setModuleConfigDesc(String moduleConfigDesc) {
+        this.moduleConfigDesc = moduleConfigDesc;
     }
 
     public String getModuleConfigName() {
@@ -122,22 +138,6 @@ public class AdModuleConfiguration implements Serializable {
 
     public void setModuleConfigValue(String moduleConfigValue) {
         this.moduleConfigValue = moduleConfigValue;
-    }
-
-    public String getModuleConfigDesc() {
-        return moduleConfigDesc;
-    }
-
-    public void setModuleConfigDesc(String moduleConfigDesc) {
-        this.moduleConfigDesc = moduleConfigDesc;
-    }
-
-    public Date getCreateDt() {
-        return createDt;
-    }
-
-    public void setCreateDt(Date createDt) {
-        this.createDt = createDt;
     }
 
     public int getRowversion() {
@@ -170,7 +170,7 @@ public class AdModuleConfiguration implements Serializable {
 
     @Override
     public String toString() {
-        return "com.gabyval.referencesbo.AdModuleConfiguration[ moduleConfigId=" + moduleConfigId + " ]";
+        return "com.gabyval.extractor.AdModuleConfiguration[ moduleConfigId=" + moduleConfigId + " ]";
     }
     
 }

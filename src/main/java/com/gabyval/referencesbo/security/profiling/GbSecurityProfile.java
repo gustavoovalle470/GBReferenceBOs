@@ -29,19 +29,18 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author OvalleGA
  */
 @Entity
-@Table(name = "gb_security_profile", catalog = "db_gabyval", schema = "")
+@Table(name = "gb_security_profile")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "GbSecurityProfile.findAll", query = "SELECT g FROM GbSecurityProfile g")
-    , @NamedQuery(name = "GbSecurityProfile.findByGbProfile", query = "SELECT g FROM GbSecurityProfile g WHERE g.gbProfile = :gbProfile")
-    , @NamedQuery(name = "GbSecurityProfile.findByGbProfileDesc", query = "SELECT g FROM GbSecurityProfile g WHERE g.gbProfileDesc = :gbProfileDesc")
-    , @NamedQuery(name = "GbSecurityProfile.findByGbProfileStatus", query = "SELECT g FROM GbSecurityProfile g WHERE g.gbProfileStatus = :gbProfileStatus")
-    , @NamedQuery(name = "GbSecurityProfile.findByGbLastXgeDt", query = "SELECT g FROM GbSecurityProfile g WHERE g.gbLastXgeDt = :gbLastXgeDt")
-    , @NamedQuery(name = "GbSecurityProfile.findByGbLastUserXge", query = "SELECT g FROM GbSecurityProfile g WHERE g.gbLastUserXge = :gbLastUserXge")
-    , @NamedQuery(name = "GbSecurityProfile.findByCreateDt", query = "SELECT g FROM GbSecurityProfile g WHERE g.createDt = :createDt")
-    , @NamedQuery(name = "GbSecurityProfile.findByRowversion", query = "SELECT g FROM GbSecurityProfile g WHERE g.rowversion = :rowversion")})
+    @NamedQuery(name = "GbSecurityProfile.findAll", query = "SELECT g FROM GbSecurityProfile g"),
+    @NamedQuery(name = "GbSecurityProfile.findByGbProfile", query = "SELECT g FROM GbSecurityProfile g WHERE g.gbProfile = :gbProfile"),
+    @NamedQuery(name = "GbSecurityProfile.findByCreateDt", query = "SELECT g FROM GbSecurityProfile g WHERE g.createDt = :createDt"),
+    @NamedQuery(name = "GbSecurityProfile.findByGbLastUserXge", query = "SELECT g FROM GbSecurityProfile g WHERE g.gbLastUserXge = :gbLastUserXge"),
+    @NamedQuery(name = "GbSecurityProfile.findByGbLastXgeDt", query = "SELECT g FROM GbSecurityProfile g WHERE g.gbLastXgeDt = :gbLastXgeDt"),
+    @NamedQuery(name = "GbSecurityProfile.findByGbProfileDesc", query = "SELECT g FROM GbSecurityProfile g WHERE g.gbProfileDesc = :gbProfileDesc"),
+    @NamedQuery(name = "GbSecurityProfile.findByGbProfileStatus", query = "SELECT g FROM GbSecurityProfile g WHERE g.gbProfileStatus = :gbProfileStatus"),
+    @NamedQuery(name = "GbSecurityProfile.findByRowversion", query = "SELECT g FROM GbSecurityProfile g WHERE g.rowversion = :rowversion")})
 public class GbSecurityProfile implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -49,6 +48,21 @@ public class GbSecurityProfile implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "GB_PROFILE")
     private String gbProfile;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "CREATE_DT")
+    @Temporal(TemporalType.DATE)
+    private Date createDt;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 20)
+    @Column(name = "GB_LAST_USER_XGE")
+    private String gbLastUserXge;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "GB_LAST_XGE_DT")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date gbLastXgeDt;
     @Size(max = 200)
     @Column(name = "GB_PROFILE_DESC")
     private String gbProfileDesc;
@@ -58,21 +72,7 @@ public class GbSecurityProfile implements Serializable {
     private int gbProfileStatus;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "GB_LAST_XGE_DT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date gbLastXgeDt;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 20)
-    @Column(name = "GB_LAST_USER_XGE")
-    private String gbLastUserXge;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "CREATE_DT")
-    @Temporal(TemporalType.DATE)
-    private Date createDt;
-    @Basic(optional = false)
-    @NotNull
+    @Column(name = "rowversion")
     private int rowversion;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "gbSecurityProfile")
     private List<GbMenuProfiling> gbMenuProfilingList;
@@ -86,12 +86,12 @@ public class GbSecurityProfile implements Serializable {
         this.gbProfile = gbProfile;
     }
 
-    public GbSecurityProfile(String gbProfile, int gbProfileStatus, Date gbLastXgeDt, String gbLastUserXge, Date createDt, int rowversion) {
+    public GbSecurityProfile(String gbProfile, Date createDt, String gbLastUserXge, Date gbLastXgeDt, int gbProfileStatus, int rowversion) {
         this.gbProfile = gbProfile;
-        this.gbProfileStatus = gbProfileStatus;
-        this.gbLastXgeDt = gbLastXgeDt;
-        this.gbLastUserXge = gbLastUserXge;
         this.createDt = createDt;
+        this.gbLastUserXge = gbLastUserXge;
+        this.gbLastXgeDt = gbLastXgeDt;
+        this.gbProfileStatus = gbProfileStatus;
         this.rowversion = rowversion;
     }
 
@@ -101,6 +101,30 @@ public class GbSecurityProfile implements Serializable {
 
     public void setGbProfile(String gbProfile) {
         this.gbProfile = gbProfile;
+    }
+
+    public Date getCreateDt() {
+        return createDt;
+    }
+
+    public void setCreateDt(Date createDt) {
+        this.createDt = createDt;
+    }
+
+    public String getGbLastUserXge() {
+        return gbLastUserXge;
+    }
+
+    public void setGbLastUserXge(String gbLastUserXge) {
+        this.gbLastUserXge = gbLastUserXge;
+    }
+
+    public Date getGbLastXgeDt() {
+        return gbLastXgeDt;
+    }
+
+    public void setGbLastXgeDt(Date gbLastXgeDt) {
+        this.gbLastXgeDt = gbLastXgeDt;
     }
 
     public String getGbProfileDesc() {
@@ -117,30 +141,6 @@ public class GbSecurityProfile implements Serializable {
 
     public void setGbProfileStatus(int gbProfileStatus) {
         this.gbProfileStatus = gbProfileStatus;
-    }
-
-    public Date getGbLastXgeDt() {
-        return gbLastXgeDt;
-    }
-
-    public void setGbLastXgeDt(Date gbLastXgeDt) {
-        this.gbLastXgeDt = gbLastXgeDt;
-    }
-
-    public String getGbLastUserXge() {
-        return gbLastUserXge;
-    }
-
-    public void setGbLastUserXge(String gbLastUserXge) {
-        this.gbLastUserXge = gbLastUserXge;
-    }
-
-    public Date getCreateDt() {
-        return createDt;
-    }
-
-    public void setCreateDt(Date createDt) {
-        this.createDt = createDt;
     }
 
     public int getRowversion() {
@@ -191,7 +191,7 @@ public class GbSecurityProfile implements Serializable {
 
     @Override
     public String toString() {
-        return "com.gabyval.referencesbo.GbSecurityProfile[ gbProfile=" + gbProfile + " ]";
+        return "com.gabyval.extractor.GbSecurityProfile[ gbProfile=" + gbProfile + " ]";
     }
     
 }

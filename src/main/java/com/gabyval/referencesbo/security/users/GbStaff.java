@@ -5,17 +5,21 @@
  */
 package com.gabyval.referencesbo.security.users;
 
+import com.gabyval.referencesbo.system.AdCatalogs;
+import com.gabyval.referencesbo.security.users.GbUsers;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -28,28 +32,62 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author OvalleGA
  */
 @Entity
-@Table(name = "gb_staff", catalog = "db_gabyval", schema = "")
+@Table(name = "gb_staff")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "GbStaff.findAll", query = "SELECT g FROM GbStaff g")
-    , @NamedQuery(name = "GbStaff.findByGbUsername", query = "SELECT g FROM GbStaff g WHERE g.gbStaffPK.gbUsername = :gbUsername")
-    , @NamedQuery(name = "GbStaff.findByGbStaffName", query = "SELECT g FROM GbStaff g WHERE g.gbStaffName = :gbStaffName")
-    , @NamedQuery(name = "GbStaff.findByGbStaffSurname", query = "SELECT g FROM GbStaff g WHERE g.gbStaffSurname = :gbStaffSurname")
-    , @NamedQuery(name = "GbStaff.findByGbIdTypeCname", query = "SELECT g FROM GbStaff g WHERE g.gbStaffPK.gbIdTypeCname = :gbIdTypeCname")
-    , @NamedQuery(name = "GbStaff.findByGbIdType", query = "SELECT g FROM GbStaff g WHERE g.gbStaffPK.gbIdType = :gbIdType")
-    , @NamedQuery(name = "GbStaff.findByGbIdNumber", query = "SELECT g FROM GbStaff g WHERE g.gbIdNumber = :gbIdNumber")
-    , @NamedQuery(name = "GbStaff.findByGbPhoneNumber", query = "SELECT g FROM GbStaff g WHERE g.gbPhoneNumber = :gbPhoneNumber")
-    , @NamedQuery(name = "GbStaff.findByGbMobileNumber", query = "SELECT g FROM GbStaff g WHERE g.gbMobileNumber = :gbMobileNumber")
-    , @NamedQuery(name = "GbStaff.findByGbEmail", query = "SELECT g FROM GbStaff g WHERE g.gbEmail = :gbEmail")
-    , @NamedQuery(name = "GbStaff.findByGbBirthdate", query = "SELECT g FROM GbStaff g WHERE g.gbBirthdate = :gbBirthdate")
-    , @NamedQuery(name = "GbStaff.findByGbGender", query = "SELECT g FROM GbStaff g WHERE g.gbGender = :gbGender")
-    , @NamedQuery(name = "GbStaff.findByCreateDt", query = "SELECT g FROM GbStaff g WHERE g.createDt = :createDt")
-    , @NamedQuery(name = "GbStaff.findByRowversion", query = "SELECT g FROM GbStaff g WHERE g.rowversion = :rowversion")})
+    @NamedQuery(name = "GbStaff.findAll", query = "SELECT g FROM GbStaff g"),
+    @NamedQuery(name = "GbStaff.findByGbUsername", query = "SELECT g FROM GbStaff g WHERE g.gbUsername = :gbUsername"),
+    @NamedQuery(name = "GbStaff.findByCreateDt", query = "SELECT g FROM GbStaff g WHERE g.createDt = :createDt"),
+    @NamedQuery(name = "GbStaff.findByGbBirthdate", query = "SELECT g FROM GbStaff g WHERE g.gbBirthdate = :gbBirthdate"),
+    @NamedQuery(name = "GbStaff.findByGbEmail", query = "SELECT g FROM GbStaff g WHERE g.gbEmail = :gbEmail"),
+    @NamedQuery(name = "GbStaff.findByGbIdNumber", query = "SELECT g FROM GbStaff g WHERE g.gbIdNumber = :gbIdNumber"),
+    @NamedQuery(name = "GbStaff.findByGbMobileNumber", query = "SELECT g FROM GbStaff g WHERE g.gbMobileNumber = :gbMobileNumber"),
+    @NamedQuery(name = "GbStaff.findByGbPhoneNumber", query = "SELECT g FROM GbStaff g WHERE g.gbPhoneNumber = :gbPhoneNumber"),
+    @NamedQuery(name = "GbStaff.findByGbStaffName", query = "SELECT g FROM GbStaff g WHERE g.gbStaffName = :gbStaffName"),
+    @NamedQuery(name = "GbStaff.findByGbStaffSurname", query = "SELECT g FROM GbStaff g WHERE g.gbStaffSurname = :gbStaffSurname"),
+    @NamedQuery(name = "GbStaff.findByRowversion", query = "SELECT g FROM GbStaff g WHERE g.rowversion = :rowversion")})
 public class GbStaff implements Serializable {
-
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected GbStaffPK gbStaffPK;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
+    @Column(name = "GB_USERNAME")
+    private String gbUsername;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "CREATE_DT")
+    @Temporal(TemporalType.DATE)
+    private Date createDt;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "GB_BIRTHDATE")
+    @Temporal(TemporalType.DATE)
+    private Date gbBirthdate;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 200)
+    @Column(name = "GB_EMAIL")
+    private String gbEmail;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 20)
+    @Column(name = "GB_ID_NUMBER")
+    private String gbIdNumber;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 20)
+    @Column(name = "GB_MOBILE_NUMBER")
+    private String gbMobileNumber;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 20)
+    @Column(name = "GB_PHONE_NUMBER")
+    private String gbPhoneNumber;
+    @Basic(optional = false)
+    @Lob
+    @Column(name = "GB_PHOTO")
+    private byte[] gbPhoto;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 200)
@@ -62,64 +100,105 @@ public class GbStaff implements Serializable {
     private String gbStaffSurname;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 20)
-    @Column(name = "GB_ID_NUMBER")
-    private String gbIdNumber;
-    @Lob
-    @Column(name = "GB_PHOTO")
-    private byte[] gbPhoto;
-    @Size(max = 20)
-    @Column(name = "GB_PHONE_NUMBER")
-    private String gbPhoneNumber;
-    @Size(max = 20)
-    @Column(name = "GB_MOBILE_NUMBER")
-    private String gbMobileNumber;
-    @Size(max = 200)
-    @Column(name = "GB_EMAIL")
-    private String gbEmail;
-    @Column(name = "GB_BIRTHDATE")
-    @Temporal(TemporalType.DATE)
-    private Date gbBirthdate;
-    @Column(name = "GB_GENDER")
-    private Integer gbGender;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "CREATE_DT")
-    @Temporal(TemporalType.DATE)
-    private Date createDt;
-    @Basic(optional = false)
-    @NotNull
+    @Column(name = "ROWVERSION")
     private int rowversion;
-    @JoinColumn(name = "GB_USERNAME", referencedColumnName = "GB_USERNAME", insertable = false, updatable = false)
+    @JoinColumns({
+        @JoinColumn(name = "GB_GENDER", referencedColumnName = "CATALOG_ITEM_ID"),
+        @JoinColumn(name = "GB_GENDER_CNAME", referencedColumnName = "CATALOG_NAME")})
     @ManyToOne(optional = false)
+    private AdCatalogs gender;
+    @JoinColumns({
+        @JoinColumn(name = "GB_ID_TYPE", referencedColumnName = "CATALOG_ITEM_ID"),
+        @JoinColumn(name = "GB_ID_TYPE_CNAME", referencedColumnName = "CATALOG_NAME")})
+    @ManyToOne(optional = false)
+    private AdCatalogs idType;
+    @JoinColumn(name = "GB_USERNAME", referencedColumnName = "GB_USERNAME", insertable = false, updatable = false)
+    @OneToOne(optional = false)
     private GbUsers gbUsers;
 
     public GbStaff() {
     }
 
-    public GbStaff(GbStaffPK gbStaffPK) {
-        this.gbStaffPK = gbStaffPK;
+    public GbStaff(String gbUsername) {
+        this.gbUsername = gbUsername;
     }
 
-    public GbStaff(GbStaffPK gbStaffPK, String gbStaffName, String gbStaffSurname, String gbIdNumber, Date createDt, int rowversion) {
-        this.gbStaffPK = gbStaffPK;
+    public GbStaff(String gbUsername, Date createDt, Date gbBirthdate, String gbEmail, String gbIdNumber, String gbMobileNumber, String gbPhoneNumber, byte[] gbPhoto, String gbStaffName, String gbStaffSurname, int rowversion) {
+        this.gbUsername = gbUsername;
+        this.createDt = createDt;
+        this.gbBirthdate = gbBirthdate;
+        this.gbEmail = gbEmail;
+        this.gbIdNumber = gbIdNumber;
+        this.gbMobileNumber = gbMobileNumber;
+        this.gbPhoneNumber = gbPhoneNumber;
+        this.gbPhoto = gbPhoto;
         this.gbStaffName = gbStaffName;
         this.gbStaffSurname = gbStaffSurname;
-        this.gbIdNumber = gbIdNumber;
-        this.createDt = createDt;
         this.rowversion = rowversion;
     }
 
-    public GbStaff(String gbUsername, String gbIdTypeCname, int gbIdType) {
-        this.gbStaffPK = new GbStaffPK(gbUsername, gbIdTypeCname, gbIdType);
+    public String getGbUsername() {
+        return gbUsername;
     }
 
-    public GbStaffPK getGbStaffPK() {
-        return gbStaffPK;
+    public void setGbUsername(String gbUsername) {
+        this.gbUsername = gbUsername;
     }
 
-    public void setGbStaffPK(GbStaffPK gbStaffPK) {
-        this.gbStaffPK = gbStaffPK;
+    public Date getCreateDt() {
+        return createDt;
+    }
+
+    public void setCreateDt(Date createDt) {
+        this.createDt = createDt;
+    }
+
+    public Date getGbBirthdate() {
+        return gbBirthdate;
+    }
+
+    public void setGbBirthdate(Date gbBirthdate) {
+        this.gbBirthdate = gbBirthdate;
+    }
+
+    public String getGbEmail() {
+        return gbEmail;
+    }
+
+    public void setGbEmail(String gbEmail) {
+        this.gbEmail = gbEmail;
+    }
+
+    public String getGbIdNumber() {
+        return gbIdNumber;
+    }
+
+    public void setGbIdNumber(String gbIdNumber) {
+        this.gbIdNumber = gbIdNumber;
+    }
+
+    public String getGbMobileNumber() {
+        return gbMobileNumber;
+    }
+
+    public void setGbMobileNumber(String gbMobileNumber) {
+        this.gbMobileNumber = gbMobileNumber;
+    }
+
+    public String getGbPhoneNumber() {
+        return gbPhoneNumber;
+    }
+
+    public void setGbPhoneNumber(String gbPhoneNumber) {
+        this.gbPhoneNumber = gbPhoneNumber;
+    }
+
+    public byte[] getGbPhoto() {
+        return gbPhoto;
+    }
+
+    public void setGbPhoto(byte[] gbPhoto) {
+        this.gbPhoto = gbPhoto;
     }
 
     public String getGbStaffName() {
@@ -138,76 +217,28 @@ public class GbStaff implements Serializable {
         this.gbStaffSurname = gbStaffSurname;
     }
 
-    public String getGbIdNumber() {
-        return gbIdNumber;
-    }
-
-    public void setGbIdNumber(String gbIdNumber) {
-        this.gbIdNumber = gbIdNumber;
-    }
-
-    public byte[] getGbPhoto() {
-        return gbPhoto;
-    }
-
-    public void setGbPhoto(byte[] gbPhoto) {
-        this.gbPhoto = gbPhoto;
-    }
-
-    public String getGbPhoneNumber() {
-        return gbPhoneNumber;
-    }
-
-    public void setGbPhoneNumber(String gbPhoneNumber) {
-        this.gbPhoneNumber = gbPhoneNumber;
-    }
-
-    public String getGbMobileNumber() {
-        return gbMobileNumber;
-    }
-
-    public void setGbMobileNumber(String gbMobileNumber) {
-        this.gbMobileNumber = gbMobileNumber;
-    }
-
-    public String getGbEmail() {
-        return gbEmail;
-    }
-
-    public void setGbEmail(String gbEmail) {
-        this.gbEmail = gbEmail;
-    }
-
-    public Date getGbBirthdate() {
-        return gbBirthdate;
-    }
-
-    public void setGbBirthdate(Date gbBirthdate) {
-        this.gbBirthdate = gbBirthdate;
-    }
-
-    public Integer getGbGender() {
-        return gbGender;
-    }
-
-    public void setGbGender(Integer gbGender) {
-        this.gbGender = gbGender;
-    }
-
-    public Date getCreateDt() {
-        return createDt;
-    }
-
-    public void setCreateDt(Date createDt) {
-        this.createDt = createDt;
-    }
-
     public int getRowversion() {
         return rowversion;
     }
 
     public void setRowversion(int rowversion) {
         this.rowversion = rowversion;
+    }
+
+    public AdCatalogs getGender() {
+        return gender;
+    }
+
+    public void setGender(AdCatalogs gender) {
+        this.gender = gender;
+    }
+
+    public AdCatalogs getIdType() {
+        return idType;
+    }
+
+    public void setIdType(AdCatalogs idType) {
+        this.idType = idType;
     }
 
     public GbUsers getGbUsers() {
@@ -221,7 +252,7 @@ public class GbStaff implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (gbStaffPK != null ? gbStaffPK.hashCode() : 0);
+        hash += (gbUsername != null ? gbUsername.hashCode() : 0);
         return hash;
     }
 
@@ -232,7 +263,7 @@ public class GbStaff implements Serializable {
             return false;
         }
         GbStaff other = (GbStaff) object;
-        if ((this.gbStaffPK == null && other.gbStaffPK != null) || (this.gbStaffPK != null && !this.gbStaffPK.equals(other.gbStaffPK))) {
+        if ((this.gbUsername == null && other.gbUsername != null) || (this.gbUsername != null && !this.gbUsername.equals(other.gbUsername))) {
             return false;
         }
         return true;
@@ -240,7 +271,7 @@ public class GbStaff implements Serializable {
 
     @Override
     public String toString() {
-        return "com.gabyval.referencesbo.GbStaff[ gbStaffPK=" + gbStaffPK + " ]";
+        return "com.gabyval.referencesbo.GbStaff[ gbUsername=" + gbUsername + " ]";
     }
     
 }

@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -27,22 +28,20 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author OvalleGA
  */
 @Entity
-@Table(name = "ad_messages", catalog = "db_gabyval", schema = "")
+@Table(name = "ad_messages")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "AdMessages.findAll", query = "SELECT a FROM AdMessages a")
-    , @NamedQuery(name = "AdMessages.findByMessageId", query = "SELECT a FROM AdMessages a WHERE a.messageId = :messageId")
-    , @NamedQuery(name = "AdMessages.findByMessageDesc", query = "SELECT a FROM AdMessages a WHERE a.messageDesc = :messageDesc")
-    , @NamedQuery(name = "AdMessages.findByMessageLevel", query = "SELECT a FROM AdMessages a WHERE a.messageLevel = :messageLevel")
-    , @NamedQuery(name = "AdMessages.findByMessageTitle", query = "SELECT a FROM AdMessages a WHERE a.messageTitle = :messageTitle")
-    , @NamedQuery(name = "AdMessages.findByUserCreate", query = "SELECT a FROM AdMessages a WHERE a.userCreate = :userCreate")
-    , @NamedQuery(name = "AdMessages.findByLastUserUpd", query = "SELECT a FROM AdMessages a WHERE a.lastUserUpd = :lastUserUpd")
-    , @NamedQuery(name = "AdMessages.findByLastDtUpd", query = "SELECT a FROM AdMessages a WHERE a.lastDtUpd = :lastDtUpd")
-    , @NamedQuery(name = "AdMessages.findByStatus", query = "SELECT a FROM AdMessages a WHERE a.status = :status")
-    , @NamedQuery(name = "AdMessages.findByCreateDt", query = "SELECT a FROM AdMessages a WHERE a.createDt = :createDt")
-    , @NamedQuery(name = "AdMessages.findByRowversion", query = "SELECT a FROM AdMessages a WHERE a.rowversion = :rowversion")})
+    @NamedQuery(name = "AdMessages.findAll", query = "SELECT a FROM AdMessages a"),
+    @NamedQuery(name = "AdMessages.findByMessageId", query = "SELECT a FROM AdMessages a WHERE a.messageId = :messageId"),
+    @NamedQuery(name = "AdMessages.findByCreateDt", query = "SELECT a FROM AdMessages a WHERE a.createDt = :createDt"),
+    @NamedQuery(name = "AdMessages.findByLastDtUpd", query = "SELECT a FROM AdMessages a WHERE a.lastDtUpd = :lastDtUpd"),
+    @NamedQuery(name = "AdMessages.findByLastUserUpd", query = "SELECT a FROM AdMessages a WHERE a.lastUserUpd = :lastUserUpd"),
+    @NamedQuery(name = "AdMessages.findByMessageLevel", query = "SELECT a FROM AdMessages a WHERE a.messageLevel = :messageLevel"),
+    @NamedQuery(name = "AdMessages.findByMessageTitle", query = "SELECT a FROM AdMessages a WHERE a.messageTitle = :messageTitle"),
+    @NamedQuery(name = "AdMessages.findByRowversion", query = "SELECT a FROM AdMessages a WHERE a.rowversion = :rowversion"),
+    @NamedQuery(name = "AdMessages.findByStatus", query = "SELECT a FROM AdMessages a WHERE a.status = :status"),
+    @NamedQuery(name = "AdMessages.findByUserCreate", query = "SELECT a FROM AdMessages a WHERE a.userCreate = :userCreate")})
 public class AdMessages implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,7 +50,19 @@ public class AdMessages implements Serializable {
     private Integer messageId;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 600)
+    @Column(name = "CREATE_DT")
+    @Temporal(TemporalType.DATE)
+    private Date createDt;
+    @Column(name = "LAST_DT_UPD")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastDtUpd;
+    @Size(max = 20)
+    @Column(name = "LAST_USER_UPD")
+    private String lastUserUpd;
+    @Basic(optional = false)
+    @NotNull
+    @Lob
+    @Size(min = 1, max = 2147483647)
     @Column(name = "MESSAGE_DESC")
     private String messageDesc;
     @Size(max = 100)
@@ -60,24 +71,15 @@ public class AdMessages implements Serializable {
     @Size(max = 100)
     @Column(name = "MESSAGE_TITLE")
     private String messageTitle;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "rowversion")
+    private int rowversion;
+    @Column(name = "status")
+    private Integer status;
     @Size(max = 20)
     @Column(name = "USER_CREATE")
     private String userCreate;
-    @Size(max = 20)
-    @Column(name = "LAST_USER_UPD")
-    private String lastUserUpd;
-    @Column(name = "LAST_DT_UPD")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date lastDtUpd;
-    private Integer status;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "CREATE_DT")
-    @Temporal(TemporalType.DATE)
-    private Date createDt;
-    @Basic(optional = false)
-    @NotNull
-    private int rowversion;
 
     public AdMessages() {
     }
@@ -86,10 +88,10 @@ public class AdMessages implements Serializable {
         this.messageId = messageId;
     }
 
-    public AdMessages(Integer messageId, String messageDesc, Date createDt, int rowversion) {
+    public AdMessages(Integer messageId, Date createDt, String messageDesc, int rowversion) {
         this.messageId = messageId;
-        this.messageDesc = messageDesc;
         this.createDt = createDt;
+        this.messageDesc = messageDesc;
         this.rowversion = rowversion;
     }
 
@@ -99,6 +101,30 @@ public class AdMessages implements Serializable {
 
     public void setMessageId(Integer messageId) {
         this.messageId = messageId;
+    }
+
+    public Date getCreateDt() {
+        return createDt;
+    }
+
+    public void setCreateDt(Date createDt) {
+        this.createDt = createDt;
+    }
+
+    public Date getLastDtUpd() {
+        return lastDtUpd;
+    }
+
+    public void setLastDtUpd(Date lastDtUpd) {
+        this.lastDtUpd = lastDtUpd;
+    }
+
+    public String getLastUserUpd() {
+        return lastUserUpd;
+    }
+
+    public void setLastUserUpd(String lastUserUpd) {
+        this.lastUserUpd = lastUserUpd;
     }
 
     public String getMessageDesc() {
@@ -125,28 +151,12 @@ public class AdMessages implements Serializable {
         this.messageTitle = messageTitle;
     }
 
-    public String getUserCreate() {
-        return userCreate;
+    public int getRowversion() {
+        return rowversion;
     }
 
-    public void setUserCreate(String userCreate) {
-        this.userCreate = userCreate;
-    }
-
-    public String getLastUserUpd() {
-        return lastUserUpd;
-    }
-
-    public void setLastUserUpd(String lastUserUpd) {
-        this.lastUserUpd = lastUserUpd;
-    }
-
-    public Date getLastDtUpd() {
-        return lastDtUpd;
-    }
-
-    public void setLastDtUpd(Date lastDtUpd) {
-        this.lastDtUpd = lastDtUpd;
+    public void setRowversion(int rowversion) {
+        this.rowversion = rowversion;
     }
 
     public Integer getStatus() {
@@ -157,20 +167,12 @@ public class AdMessages implements Serializable {
         this.status = status;
     }
 
-    public Date getCreateDt() {
-        return createDt;
+    public String getUserCreate() {
+        return userCreate;
     }
 
-    public void setCreateDt(Date createDt) {
-        this.createDt = createDt;
-    }
-
-    public int getRowversion() {
-        return rowversion;
-    }
-
-    public void setRowversion(int rowversion) {
-        this.rowversion = rowversion;
+    public void setUserCreate(String userCreate) {
+        this.userCreate = userCreate;
     }
 
     @Override
@@ -195,7 +197,7 @@ public class AdMessages implements Serializable {
 
     @Override
     public String toString() {
-        return "com.gabyval.referencesbo.AdMessages[ messageId=" + messageId + " ]";
+        return "com.gabyval.extractor.AdMessages[ messageId=" + messageId + " ]";
     }
     
 }
