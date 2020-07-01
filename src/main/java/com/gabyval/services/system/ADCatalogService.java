@@ -6,12 +6,11 @@
 package com.gabyval.services.system;
 
 import com.gabyval.persistence.exception.GBPersistenceException;
+import com.gabyval.referencesbo.GBSentencesRBOs;
 import com.gabyval.referencesbo.system.AdCatalogs;
-import com.gabyval.spring.DAO.system.ADCatalogDAO;
+import com.gabyval.services.GabyvalService;
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,23 +20,15 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class ADCatalogService {
-    @Autowired
-    private ADCatalogDAO aDCatalogDAO;
-    
-    public void save(Object o_to_save) throws GBPersistenceException {
-        aDCatalogDAO.save(o_to_save);
+public class ADCatalogService extends GabyvalService{
+
+    @Override
+    public Object load(Serializable o_id) throws GBPersistenceException {
+        return (AdCatalogs) persistence.load(o_id, AdCatalogs.class);
     }
 
-    public AdCatalogs load(Serializable o_id) throws GBPersistenceException {
-        return (AdCatalogs) aDCatalogDAO.load(o_id);
-    }
-    
+    @Override
     public List<Object> getAll() throws GBPersistenceException {
-        return aDCatalogDAO.getAll();
-    }    
-
-    public List<Object> runSQL(String query_name, HashMap<String, Object> parameters) throws GBPersistenceException {
-        return aDCatalogDAO.runSQL(query_name, parameters);
-    }  
+        return persistence.getAll(GBSentencesRBOs.ADCATALOGS_FINDALL);
+    }
 }

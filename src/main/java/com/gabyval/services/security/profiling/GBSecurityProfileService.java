@@ -6,13 +6,11 @@
 package com.gabyval.services.security.profiling;
 
 import com.gabyval.persistence.exception.GBPersistenceException;
+import com.gabyval.referencesbo.GBSentencesRBOs;
 import com.gabyval.referencesbo.security.profiling.GbSecurityProfile;
-import com.gabyval.spring.DAO.security.porfiling.GBSecurityProfileDAO;
+import com.gabyval.services.GabyvalService;
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
-import org.hibernate.Query;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,23 +20,15 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class GBSecurityProfileService {
-    @Autowired
-    private GBSecurityProfileDAO gBSecurityProfileDAO;
-    
-    public void save(Object o_to_save) throws GBPersistenceException {
-        gBSecurityProfileDAO.save(o_to_save);
+public class GBSecurityProfileService extends GabyvalService{
+
+    @Override
+    public Object load(Serializable o_id) throws GBPersistenceException {
+        return (GbSecurityProfile) persistence.load(o_id, GbSecurityProfile.class);
     }
 
-    public GbSecurityProfile load(Serializable o_id) throws GBPersistenceException {
-        return (GbSecurityProfile) gBSecurityProfileDAO.load(o_id);
-    }
-    
+    @Override
     public List<Object> getAll() throws GBPersistenceException {
-        return gBSecurityProfileDAO.getAll();
-    }    
-
-    public List<Object> runSQL(String query_name, HashMap<String, Object> parameters) throws GBPersistenceException {
-        return gBSecurityProfileDAO.runSQL(query_name, parameters);
-    }  
+        return persistence.getAll(GBSentencesRBOs.GBSECURITYPROFILE_FINDALL);
+    }
 }

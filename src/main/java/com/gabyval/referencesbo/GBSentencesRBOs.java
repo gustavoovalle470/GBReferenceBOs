@@ -133,6 +133,7 @@ public class GBSentencesRBOs {
     public static final String GBSTAFF_FINDBYGBGENDER="GbStaff.findByGbGender";
     public static final String GBSTAFF_FINDBYCREATEDT="GbStaff.findByCreateDt";
     public static final String GBSTAFF_FINDBYROWVERSION="GbStaff.findByRowversion";
+    public static final String GBSTAFF_FINDBYPERSONALDATA="GbStaff.findByPersonalData";
     
     /**
      * Sentencias para la tabla GbUsers

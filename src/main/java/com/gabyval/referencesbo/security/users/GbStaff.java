@@ -6,7 +6,6 @@
 package com.gabyval.referencesbo.security.users;
 
 import com.gabyval.referencesbo.system.AdCatalogs;
-import com.gabyval.referencesbo.security.users.GbUsers;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -45,6 +44,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "GbStaff.findByGbPhoneNumber", query = "SELECT g FROM GbStaff g WHERE g.gbPhoneNumber = :gbPhoneNumber"),
     @NamedQuery(name = "GbStaff.findByGbStaffName", query = "SELECT g FROM GbStaff g WHERE g.gbStaffName = :gbStaffName"),
     @NamedQuery(name = "GbStaff.findByGbStaffSurname", query = "SELECT g FROM GbStaff g WHERE g.gbStaffSurname = :gbStaffSurname"),
+    @NamedQuery(name = "GbStaff.findByPersonalData", query = "SELECT g from GbStaff g where g.gbIdNumber=:gbIdNumber AND g.gbStaffName=:gbStaffName AND g.gbStaffSurname=:gbStaffSurname"),
     @NamedQuery(name = "GbStaff.findByRowversion", query = "SELECT g FROM GbStaff g WHERE g.rowversion = :rowversion")})
 public class GbStaff implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -84,7 +84,6 @@ public class GbStaff implements Serializable {
     @Size(min = 1, max = 20)
     @Column(name = "GB_PHONE_NUMBER")
     private String gbPhoneNumber;
-    @Basic(optional = false)
     @Lob
     @Column(name = "GB_PHOTO")
     private byte[] gbPhoto;
@@ -123,7 +122,7 @@ public class GbStaff implements Serializable {
         this.gbUsername = gbUsername;
     }
 
-    public GbStaff(String gbUsername, Date createDt, Date gbBirthdate, String gbEmail, String gbIdNumber, String gbMobileNumber, String gbPhoneNumber, byte[] gbPhoto, String gbStaffName, String gbStaffSurname, int rowversion) {
+    public GbStaff(String gbUsername, Date createDt, Date gbBirthdate, String gbEmail, String gbIdNumber, String gbMobileNumber, String gbPhoneNumber, String gbStaffName, String gbStaffSurname, int rowversion) {
         this.gbUsername = gbUsername;
         this.createDt = createDt;
         this.gbBirthdate = gbBirthdate;
@@ -131,7 +130,6 @@ public class GbStaff implements Serializable {
         this.gbIdNumber = gbIdNumber;
         this.gbMobileNumber = gbMobileNumber;
         this.gbPhoneNumber = gbPhoneNumber;
-        this.gbPhoto = gbPhoto;
         this.gbStaffName = gbStaffName;
         this.gbStaffSurname = gbStaffSurname;
         this.rowversion = rowversion;
@@ -240,7 +238,7 @@ public class GbStaff implements Serializable {
     public void setIdType(AdCatalogs idType) {
         this.idType = idType;
     }
-
+    
     public GbUsers getGbUsers() {
         return gbUsers;
     }

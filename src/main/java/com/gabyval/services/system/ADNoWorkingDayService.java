@@ -6,13 +6,11 @@
 package com.gabyval.services.system;
 
 import com.gabyval.persistence.exception.GBPersistenceException;
+import com.gabyval.referencesbo.GBSentencesRBOs;
 import com.gabyval.referencesbo.system.AdNoWorkingDays;
-import com.gabyval.spring.DAO.system.ADNoWorkingDaysDAO;
+import com.gabyval.services.GabyvalService;
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
-import org.hibernate.Query;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,23 +20,15 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class ADNoWorkingDayService {
-    @Autowired
-    private ADNoWorkingDaysDAO aDNoWorkingDaysDAO;
+public class ADNoWorkingDayService extends GabyvalService{
     
-    public void save(Object o_to_save) throws GBPersistenceException {
-        aDNoWorkingDaysDAO.save(o_to_save);
+    @Override
+    public Object load(Serializable o_id) throws GBPersistenceException {
+        return persistence.load(o_id, AdNoWorkingDays.class);
     }
 
-    public AdNoWorkingDays load(Serializable o_id) throws GBPersistenceException {
-        return (AdNoWorkingDays) aDNoWorkingDaysDAO.load(o_id);
-    }
-    
+    @Override
     public List<Object> getAll() throws GBPersistenceException {
-        return aDNoWorkingDaysDAO.getAll();
-    }    
-
-    public List<Object> runSQL(String query_name, HashMap<String, Object> parameters) throws GBPersistenceException {
-        return aDNoWorkingDaysDAO.runSQL(query_name, parameters);
-    } 
+        return persistence.getAll(GBSentencesRBOs.ADNOWORKINGDAYS_FINDALL);
+    }
 }

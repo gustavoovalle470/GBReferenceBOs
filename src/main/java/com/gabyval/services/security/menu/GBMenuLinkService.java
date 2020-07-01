@@ -6,13 +6,11 @@
 package com.gabyval.services.security.menu;
 
 import com.gabyval.persistence.exception.GBPersistenceException;
+import com.gabyval.referencesbo.GBSentencesRBOs;
 import com.gabyval.referencesbo.security.menu.GbMenulinks;
-import com.gabyval.spring.DAO.security.menu.GBMenuLinkDAO;
+import com.gabyval.services.GabyvalService;
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
-import org.hibernate.Query;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,23 +20,15 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class GBMenuLinkService {
-    @Autowired
-    private GBMenuLinkDAO gBMenuLinkDAO;
+public class GBMenuLinkService extends GabyvalService{
     
-    public void save(Object o_to_save) throws GBPersistenceException {
-        gBMenuLinkDAO.save(o_to_save);
+    @Override
+    public Object load(Serializable o_id) throws GBPersistenceException {
+        return (GbMenulinks) persistence.load(o_id, GbMenulinks.class);
     }
 
-    public GbMenulinks load(Serializable o_id) throws GBPersistenceException {
-        return (GbMenulinks) gBMenuLinkDAO.load(o_id);
-    }
-    
+    @Override
     public List<Object> getAll() throws GBPersistenceException {
-        return gBMenuLinkDAO.getAll();
-    }    
-
-    public List<Object> runSQL(String query_name, HashMap<String, Object> parameters) throws GBPersistenceException {
-        return gBMenuLinkDAO.runSQL(query_name, parameters);
-    }  
+        return persistence.getAll(GBSentencesRBOs.GBMENULINKS_FINDALL);
+    }
 }

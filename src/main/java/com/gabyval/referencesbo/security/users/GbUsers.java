@@ -47,6 +47,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "GbUsers.findByGbUserSystem", query = "SELECT g FROM GbUsers g WHERE g.gbUserSystem = :gbUserSystem"),
     @NamedQuery(name = "GbUsers.findByRowversion", query = "SELECT g FROM GbUsers g WHERE g.rowversion = :rowversion")})
 public class GbUsers implements Serializable {
+    
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -91,12 +92,12 @@ public class GbUsers implements Serializable {
         @JoinColumn(name = "GB_LOGIN_STATUS", referencedColumnName = "CATALOG_ITEM_ID"),
         @JoinColumn(name = "GB_LOGIN_STATUS_CNAME", referencedColumnName = "CATALOG_NAME")})
     @ManyToOne(optional = false)
-    private AdCatalogs LoginStatus;
+    private AdCatalogs loginStatus;
     @JoinColumns({
         @JoinColumn(name = "GB_OPRATIVE_STATUS", referencedColumnName = "CATALOG_ITEM_ID"),
         @JoinColumn(name = "GB_OPERATIVE_CNAME", referencedColumnName = "CATALOG_NAME")})
     @ManyToOne(optional = false)
-    private AdCatalogs OperativeStatus;
+    private AdCatalogs operativeStatus;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "gbLastUserXge")
     private List<GbUsers> gbUsersList;
     @JoinColumn(name = "GB_LAST_USER_XGE", referencedColumnName = "GB_USERNAME")
@@ -186,36 +187,19 @@ public class GbUsers implements Serializable {
     }
 
     public AdCatalogs getLoginStatus() {
-        return LoginStatus;
+        return loginStatus;
     }
 
-    public void setLoginStatus(AdCatalogs LoginStatus) {
-        this.LoginStatus = LoginStatus;
+    public void setLoginStatus(AdCatalogs loginStatus) {
+        this.loginStatus = loginStatus;
     }
 
     public AdCatalogs getOperativeStatus() {
-        return OperativeStatus;
+        return operativeStatus;
     }
 
-    public void setOperativeStatus(AdCatalogs OperativeStatus) {
-        this.OperativeStatus = OperativeStatus;
-    }
-
-    @XmlTransient
-    public List<GbUsers> getGbUsersList() {
-        return gbUsersList;
-    }
-
-    public void setGbUsersList(List<GbUsers> gbUsersList) {
-        this.gbUsersList = gbUsersList;
-    }
-
-    public GbUsers getGbLastUserXge() {
-        return gbLastUserXge;
-    }
-
-    public void setGbLastUserXge(GbUsers gbLastUserXge) {
-        this.gbLastUserXge = gbLastUserXge;
+    public void setOperativeStatus(AdCatalogs operativeStatus) {
+        this.operativeStatus = operativeStatus;
     }
 
     @Override
@@ -242,10 +226,26 @@ public class GbUsers implements Serializable {
     public String toString() {
         return "com.gabyval.referencesbo.GbUsers[ gbUsername=" + gbUsername + " ]";
     }
-    
-    public int getDaysPassedLastXgePwd(){
-        Date fechaInicial=gbLastPwdXgeDt;
-        Date fechaFinal=Calendar.getInstance().getTime();
-        return ((((int) ((fechaFinal.getTime()-fechaInicial.getTime())/86400000))));
+
+    @XmlTransient
+    public List<GbUsers> getGbUsersList() {
+        return gbUsersList;
+    }
+
+    public void setGbUsersList(List<GbUsers> gbUsersList) {
+        this.gbUsersList = gbUsersList;
+    }
+
+    public GbUsers getGbLastUserXge() {
+        return gbLastUserXge;
+    }
+
+    public void setGbLastUserXge(GbUsers gbLastUserXge) {
+        this.gbLastUserXge = gbLastUserXge;
+    }
+
+    public int getDaysPassedLastXgePwd() {
+        Date today=Calendar.getInstance().getTime();
+        return (int) ((today.getTime()-getGbLastPwdXgeDt().getTime())/86400000);
     }
 }

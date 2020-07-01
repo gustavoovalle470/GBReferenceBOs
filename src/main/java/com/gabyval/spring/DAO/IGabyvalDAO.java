@@ -9,7 +9,6 @@ import com.gabyval.persistence.exception.GBPersistenceException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
-import org.hibernate.Query;
 
 /**
  * This interface define all DAO classes to implement in this project.
@@ -35,6 +34,7 @@ public interface IGabyvalDAO {
     /**
      * This method load a object from database.
      * @param o_id serializable Object the id to find the object in database.
+     * @param class_to_load the class of the object
      * @return Object the object obtained from database. 
      * @throws GBPersistenceException if:
      * <ol>
@@ -44,18 +44,19 @@ public interface IGabyvalDAO {
      *      <li>Any SQL exception.</li>
      * </ol>
      */
-    public Object load(Serializable o_id) throws GBPersistenceException;
+    public Object load(Serializable o_id, Class class_to_load) throws GBPersistenceException;
     
     /**
      * This method obtained all class objects from database.
-     * @return List<Objects> all class objects from database.
+     * @param findAllExpression name for the find all query
+     * @return List<Object> all class objects from database.
      * @throws GBPersistenceException if:
      * <ol>
      *      <li>The session factory is null</li>
      *      <li>Any SQL exception.</li>
      * </ol>
      */
-    public List<Object> getAll() throws GBPersistenceException;
+    public List<Object> getAll(String findAllExpression) throws GBPersistenceException;
     
     /**
      * This method obtained objects from SQL sentence.
@@ -69,4 +70,37 @@ public interface IGabyvalDAO {
      * </ol>
      */
     public List<Object> runSQL(String query_name, HashMap<String, Object> parameters) throws GBPersistenceException;
+    
+    /**
+     * This method allow update a entry in database
+     * @param object_to_update the object to update.
+     * @throws GBPersistenceException if:
+     * <ol>
+     *      <li>Any problem to update entry</li>
+     *      <li>Any SQL exception.</li>
+     * </ol>
+     */
+    public void update(Object object_to_update) throws GBPersistenceException;
+    
+    /**
+     * This method allow delete a entry in database.
+     * @param object_to_delete the object to delete.
+     * @throws GBPersistenceException  if:
+     * <ol>
+     *      <li>Any problem to update entry</li>
+     *      <li>Any SQL exception.</li>
+     * </ol>
+     */
+    public void delete(Object object_to_delete) throws GBPersistenceException;
+    
+    /**
+     * This method allow refresh a object in the session.
+     * @param object_to_refresh the object to refresh.
+     * @throws GBPersistenceException if:
+     * <ol>
+     *      <li>Any problem to update entry</li>
+     *      <li>Any SQL exception.</li>
+     * </ol>
+     */
+    public void refresh(Object object_to_refresh) throws GBPersistenceException;
 }

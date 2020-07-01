@@ -6,12 +6,11 @@
 package com.gabyval.services.system;
 
 import com.gabyval.persistence.exception.GBPersistenceException;
+import com.gabyval.referencesbo.GBSentencesRBOs;
 import com.gabyval.referencesbo.system.AdMessages;
-import com.gabyval.spring.DAO.system.ADMessageDAO;
+import com.gabyval.services.GabyvalService;
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,23 +20,15 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class ADMessageService {
-    @Autowired
-    private ADMessageDAO aDMessageDAO;
+public class ADMessageService extends GabyvalService{
     
-    public void save(Object o_to_save) throws GBPersistenceException {
-        aDMessageDAO.save(o_to_save);
-    }
-
-    public AdMessages load(Serializable o_id) throws GBPersistenceException {
-        return (AdMessages) aDMessageDAO.load(o_id);
-    }
-    
-    public List<Object> getAll() throws GBPersistenceException {
-        return aDMessageDAO.getAll();
-    }    
-
-   public List<Object> runSQL(String query_name, HashMap<String, Object> parameters) throws GBPersistenceException {
-        return aDMessageDAO.runSQL(query_name, parameters);
+    @Override
+    public Object load(Serializable o_id) throws GBPersistenceException {
+        return (AdMessages) persistence.load(o_id, AdMessages.class);
     } 
+
+    @Override
+    public List<Object> getAll() throws GBPersistenceException {
+        return persistence.getAll(GBSentencesRBOs.ADMESSAGES_FINDALL);
+    }
 }
